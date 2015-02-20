@@ -1,0 +1,27 @@
+#Small cheat sheet for the mpv video player
+#Full shortcut list @ https://github.com/mpv-player/mpv/blob/master/etc/input.conf
+# Keys:
+# f=fullscreen 
+# v=subtitle 
+# o=on-screen display 
+# #=switch audio stream 
+# RIGHT seek 10 
+# LEFT seek -10 
+# UP seek 60 
+# DOWN seek -60   
+
+# Play video fullscreen 
+mpv --fs videofile.avi   
+
+# Play video at 70% of the volume. 
+mpv --volume=70 videofile.avi   
+
+# Play video at specific time 
+mpv --start=00:01:03 --end=00:02:01 videofile.avi   
+
+# Play video at 50% of your screen size. 
+mpv --autofit=50% videofile.avi   
+
+# Looping video 
+mpv --loop=4 videofile.avi 
+mpv --loop=inf videofile.avi
