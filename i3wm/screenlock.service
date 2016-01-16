@@ -7,7 +7,7 @@ User=ow
 Type=forking
 Environment=DISPLAY=:0
 ExecStartPre=
-ExecStart=/usr/bin/i3lock
+ExecStart=/home/ow/Projects/linux-utils/i3wm/screenshotLock.sh
 
 [Install]
 WantedBy=sleep.target
