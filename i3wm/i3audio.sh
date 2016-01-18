@@ -54,4 +54,7 @@ else
     MUTE_OPT=""
 fi
 
+#show volume change via volnoti
 volnoti-show $MUTE_OPT $CURR_VOL
+#trigger i3status reload
+killall -USR1 i3status

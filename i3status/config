@@ -50,20 +50,25 @@ ethernet _first_ {
 battery 0 {
         format = "Int: %status %percentage %remaining %emptytime"
         format_down = "No battery"
+        integer_battery_capacity = true
         status_chr = "⚇ CHR"
         status_bat = "⚡ BAT"
         status_full = "☻ FULL"
-        low_threshold = 10
+        low_threshold = 30
+        threshold_type = time
         path = "/sys/class/power_supply/BAT%d/uevent"
 }
 
 battery 1 {
-        format = "Ext: %status %percentage %remaining %emptytime"
+        format = "Ext: %status %percentage %remaining %consumption"
         format_down = "No battery"
+        hide_seconds = true
+        integer_battery_capacity = true
         status_chr = "⚇ CHR"
         status_bat = "⚡ BAT"
         status_full = "☻ FULL"
-        low_threshold = 10
+        low_threshold = 30
+        threshold_type = time
         path = "/sys/class/power_supply/BAT%d/uevent"
 }
 run_watch DHCP {
