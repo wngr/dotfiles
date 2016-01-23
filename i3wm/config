@@ -181,6 +181,7 @@ bindsym XF86AudioMute exec ~/Projects/linux-utils/i3wm/i3audio.sh mute
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
 
+bindsym XF86Tools exec ~/Projects/linux-utils/toggleKeyboardLayout.sh
 bindsym XF86Search exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py previous
 bindsym XF86LaunchA exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py playpause
 bindsym XF86Explorer exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py next
