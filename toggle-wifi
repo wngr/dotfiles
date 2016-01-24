@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# toggle-wifi - Use nmcli to toggle the Wi-Fi radio
+#
+
+if nmcli radio wifi | grep enabled >/dev/null; then
+    nmcli radio wifi off
+else
+    nmcli radio wifi on
+fi

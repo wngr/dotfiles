@@ -185,6 +185,7 @@ bindsym XF86Tools exec ~/Projects/linux-utils/toggleKeyboardLayout.sh
 bindsym XF86Search exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py previous
 bindsym XF86LaunchA exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py playpause
 bindsym XF86Explorer exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py next
+#bindsym XF86WLAN exec ~/Projects/linux-utils/toggle-wifi
 
 #force windows to open on certain workspaces
 assign [class="Firefox"] $workspace2
