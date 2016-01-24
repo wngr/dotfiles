@@ -170,7 +170,7 @@ exec --no-startup-id seafile-applet
 exec --no-startup-id /usr/libexec/gnome-settings-daemon
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
-exec --no-startup-id /usr/bin/python3 /home/ow/Projects/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log
+exec --no-startup-id "/usr/bin/python3 /home/ow/Projects/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log"
 
 bindsym $mod+m move workspace to output left
 bindsym --release Print exec gnome-screenshot -ac
