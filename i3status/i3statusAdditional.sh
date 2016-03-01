@@ -9,10 +9,10 @@ do
     externalIp=$(dig +short myip.opendns.com @resolver1.opendns.com)
         if [ $LG == "de" ]
         then
-            dat="[{ \"full_text\": \"layout: $LG\", \"color\":\"#009E00\" },"
+            dat="[{ \"full_text\": \"layout: $LG\", \"color\":\"#00FF00\" },"
         else
-            dat="[{ \"full_text\": \"layout: $LG\", \"color\":\"#C60101\" },"
+            dat="[{ \"full_text\": \"layout: $LG\", \"color\":\"#FF0000\" },"
         fi
-    dat+="{ \"full_text\": \"ext. ip: $externalIp\"},"
+    dat+="{ \"full_text\": \"ext. IP: $externalIp\"},"
     echo "${line/[/$dat}" || exit 1
 done
