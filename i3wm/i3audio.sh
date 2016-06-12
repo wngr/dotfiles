@@ -24,8 +24,14 @@ function unmute {
         pacmd set-sink-mute $sink 0
     done
 }
-
-AMIXER="amixer --card $AMIXER_CARD -q set Master"
+function mute {
+    # Unmute all pulseaudio sinks
+    for sink in $(pacmd list-sinks | grep -oE 'index: [0-9]+' | awk '{ print $2 }'); do
+        pactl set-sink-mute $sink toggle
+    done
+}
+AMIXER="amixer -q sset Master"
+#"amixer --card $AMIXER_CARD -q set Master"
 case "$1" in
     inc)
         $AMIXER ${VOL_INCREMENT}+
@@ -36,7 +42,8 @@ case "$1" in
         unmute
         ;;
     mute) 
-       pactl set-sink-mute 1 toggle 
+        mute
+        #pactl set-sink-mute 1 toggle 
        ;;
     *)
         echo "Usage: $0 {inc|dec|mute}"
@@ -44,7 +51,7 @@ case "$1" in
 esac
 
 # Get current volume
-CURR_VOL=$(amixer -c1 get Master | grep -oE '([[:digit:]]+)%' | cut -d'%' -f1)
+CURR_VOL=$(amixer get Master | grep -m1 -oE '([[:digit:]]+)%' | cut -d'%' -f1)
 
 # Get mute status
 amixer --card $AMIXER_CARD get Master | grep '\[off\]'
