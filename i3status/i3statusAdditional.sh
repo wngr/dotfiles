@@ -14,5 +14,12 @@ do
             dat="[{ \"full_text\": \"layout: $LG\", \"color\":\"#FF0000\" },"
         fi
     dat+="{ \"full_text\": \"ext. IP: $externalIp\"},"
+    BT=$(rfkill list bluetooth | grep yes)
+    if [[ $BT -eq 0 ]]; then
+        BLUETOOTH='on'
+    else
+        BLUETOOTH='off' 
+    fi
+    dat+="{ \"full_text\": \"bluetooth: $BLUETOOTH\"},"
     echo "${line/[/$dat}" || exit 1
 done
