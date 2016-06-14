@@ -11,4 +11,4 @@ else
     newLayout=$firstLayout
 fi
 echo "set layout to $newLayout"
-setxkbmap $newLayout
+setxkbmap $newLayout -option compose:ralt
