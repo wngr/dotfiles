@@ -20,6 +20,6 @@ do
     else
         BLUETOOTH='off' 
     fi
-    dat+="{ \"full_text\": \"bluetooth: $BLUETOOTH\"},"
+    dat+="{ \"full_text\": \"bt: $BLUETOOTH\"},"
     echo "${line/[/$dat}" || exit 1
 done
