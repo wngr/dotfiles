@@ -190,9 +190,9 @@ exec --no-startup-id seafile-applet
 exec --no-startup-id /usr/libexec/gnome-settings-daemon
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
-exec --no-startup-id sflphone
 exec --no-startup-id "/usr/bin/python2.7 /home/ow/Projects/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log"
 exec --no-startup-id "xss-lock /home/ow/Projects/linux-utils/i3wm/screenshotLock.sh"
+exec --no-startup-id "v4l2-ctl -d /dev/video1 -c power_line_frequency=1"
 
 bindsym $mod+m move workspace to output left
 bindsym $mod+n move workspace to output up
