@@ -26,6 +26,7 @@ font pango:DejaVu Sans 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -92,13 +93,13 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-set $workspace1 "1: " 
-set $workspace2 "2: " 
-set $workspace3 "3: "
+set $workspace1 "1"
+set $workspace2 "2"
+set $workspace3 "3"
 set $workspace4 "4"
-set $workspace5 "5: "
-set $workspace9 "9: "
-set $workspace10 "10: " 
+set $workspace5 "5"
+set $workspace9 "9"
+set $workspace10 "10"
 # switch to workspace
 bindsym $mod+1 workspace $workspace1 
 bindsym $mod+2 workspace $workspace2
@@ -178,47 +179,68 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-        status_command ~/.config/i3status/i3statusAdditional.sh #i3status
+#bar {
+#        status_command ~/.config/i3status/i3statusAdditional.sh #i3status
         #tray_output primary
+#}
+
+bar {
+    font pango:DejaVu Sans Mono, FontAwesome 12
+    position top
+    status_command i3status-rs /home/ow/src/linux-utils/i3-rs-config.toml
+    colors {
+        separator #666666
+        background #222222
+        statusline #dddddd
+        focused_workspace #0088CC #0088CC #ffffff
+        active_workspace #333333 #333333 #ffffff
+        inactive_workspace #333333 #333333 #888888
+        urgent_workspace #2f343a #900000 #ffffff
+    }
 }
+
+exec --no-startup-id "xrandr --dpi 220"
 exec --no-startup-id "feh --bg-fill .desktopbackground"
 exec --no-startup-id "/bin/bash /home/ow/Seafile/0_me/Linux/Scripts/encfs_docs.sh"
-exec --no-startup-id keepassx
+exec --no-startup-id keepassxc
+exec --no-startup-id "setxkbmap us -option compose:ralt"
 exec --no-startup-id "/bin/bash /home/ow/Seafile/0_me/Linux/Scripts/redshift.sh"
 exec --no-startup-id seafile-applet
-exec --no-startup-id /usr/libexec/gnome-settings-daemon
+#exec --no-startup-id /usr/libexec/gnome-settings-daemon
 exec --no-startup-id nm-applet
 exec --no-startup-id volnoti
-exec --no-startup-id "/usr/bin/python2.7 /home/ow/Projects/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log"
-exec --no-startup-id "xss-lock /home/ow/Projects/linux-utils/i3wm/screenshotLock.sh"
-exec --no-startup-id "v4l2-ctl -d /dev/video1 -c power_line_frequency=1"
+exec --no-startup-id "/usr/bin/python2.7 /home/ow/src/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log"
+exec --no-startup-id "xss-lock /home/ow/src/linux-utils/i3wm/screenshotLock.sh"
+exec --no-startup-id "v4l2-ctl -d /dev/video2 -c power_line_frequency=1"
+exec --no-startup-id "xinput set-prop 'TPPS/2 IBM TrackPoint' 307 .6"
 
 bindsym $mod+m move workspace to output left
 bindsym $mod+n move workspace to output up
-bindsym --release Print exec gnome-screenshot -ac
-bindsym XF86AudioMicMute exec ~/Projects/linux-utils/i3wm/i3MicToggle.sh
-bindsym XF86AudioRaiseVolume exec ~/Projects/linux-utils/i3wm/i3audio.sh inc 
-bindsym XF86AudioLowerVolume exec ~/Projects/linux-utils/i3wm/i3audio.sh dec
-bindsym XF86AudioMute exec ~/Projects/linux-utils/i3wm/i3audio.sh mute
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
+bindsym --release Print exec gnome-screenshot -a
+bindsym XF86AudioMicMute exec ~/src/linux-utils/i3wm/i3MicToggle.sh
+bindsym XF86AudioRaiseVolume exec ~/src/linux-utils/i3wm/i3audio.sh inc 
+bindsym XF86AudioLowerVolume exec ~/src/linux-utils/i3wm/i3audio.sh dec
+bindsym XF86AudioMute exec ~/src/linux-utils/i3wm/i3audio.sh mute
+#bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+#bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
-bindsym XF86Tools exec ~/Projects/linux-utils/toggleKeyboardLayout.sh
-bindsym XF86Search exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py previous
-bindsym XF86LaunchA exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py playpause
-#bindsym XF86Explorer exec ~/Projects/linux-utils/rhythmboxInterface/rhythmbox.py next
+bindsym XF86Tools exec ~/src/linux-utils/toggleKeyboardLayout.sh
+bindsym XF86Search exec ~/src/linux-utils/rhythmboxInterface/rhythmbox.py previous
+bindsym XF86LaunchA exec ~/src/linux-utils/rhythmboxInterface/rhythmbox.py playpause
+#bindsym XF86Explorer exec ~/src/linux-utils/rhythmboxInterface/rhythmbox.py next
 bindsym XF86Explorer exec gnome-control-center
-#bindsym XF86WLAN exec ~/Projects/linux-utils/toggle-wifi
+#bindsym XF86WLAN exec ~/src/linux-utils/toggle-wifi
 
 #force windows to open on certain workspaces
-assign [class="Firefox"] $workspace2
-assign [class="VirtualBox"] $workspace4
-assign [class="jetbrains-clion"] $workspace5
-assign [class="Evolution"] $workspace9
-assign [class="Rhythmbox"] $workspace10
-set $Locker ~/Projects/linux-utils/i3wm/screenshotLock.sh && sleep 1
-set $LockerWithPauseUnpauseRhythmbox ~/Projects/linux-utils/rhythmboxInterface/rhythmboxInterface.py && ~/Projects/linux-utils/i3wm/screenshotLock.sh -n && ~/Projects/linux-utils/rhythmboxInterface/rhythmboxInterface.py #use i3lock with -n nofork option
+#assign [class="Firefox"] $workspace2
+#assign [class="VirtualBox"] $workspace4
+#assign [class="jetbrains-clion"] $workspace5
+#assign [class="Evolution"] $workspace9
+#assign [class="Rhythmbox"] $workspace10
+set $Locker ~/src/linux-utils/i3wm/screenshotLock.sh && sleep 1
+set $LockerWithPauseUnpauseRhythmbox ~/src/linux-utils/rhythmboxInterface/rhythmboxInterface.py && ~/src/linux-utils/i3wm/screenshotLock.sh -n && ~/src/linux-utils/rhythmboxInterface/rhythmboxInterface.py #use i3lock with -n nofork option
 
 bindsym $mod+Mod1+l exec --no-startup-id $LockerWithPauseUnpauseRhythmbox #lock screen with win+alt+l
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
@@ -236,3 +258,9 @@ mode "$mode_system" {
 }
     
 bindsym $mod+Delete mode "$mode_system"
+mouse_warping output
+
+set $screencast bash /home/ow/Seafile/0_me/Linux/Scripts/screencast.sh
+bindsym $mod+Shift+s exec $screencast
+
+

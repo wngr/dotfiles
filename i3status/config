@@ -17,6 +17,8 @@ order += "cpu_usage"
 order += "load"
 order += "disk /"
 order += "disk /home"
+order += "disk /home/ow/2nd-ssd"
+order += "disk /tmp"
 # order += "ipv6"
 order += "run_watch DHCP"
 order += "path_exists VPN"
@@ -78,7 +80,7 @@ run_watch DHCP {
 
 path_exists VPN {
         #path exists when a VPN tunnel launched by nmcli/nm-applet is active
-        path = "/proc/sys/net/ipv4/conf/tun0"
+        path = "/proc/sys/net/ipv4/conf/wg-wngr"
 }
 
 tztime local {
@@ -95,4 +97,12 @@ disk "/" {
 
 disk "/home" {
         format = "/home %avail/%total"
+}
+
+disk "/home/ow/2nd-ssd" {
+        format = "/2 %avail/%total"
+}
+
+disk "/tmp" {
+        format = "/tmp %avail/%total"
 }

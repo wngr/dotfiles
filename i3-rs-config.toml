@@ -1,0 +1,94 @@
+theme = "slick"
+icons = "awesome"
+
+[[block]]
+block = "cpu"
+interval = 1
+format = "{barchart} {utilization}%"
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{Mup}%"
+format_swap = "{SUp}%"
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GB"
+interval = 20
+warning = 10.0
+alert = 5.0
+
+[[block]]
+block = "disk_space"
+path = "/home"
+alias = "/home"
+info_type = "available"
+interval = 20
+warning = 10.0
+alert = 5.0
+
+#[[block]]
+#block = "disk_space"
+#path = "/home/ow/2nd-ssd"
+#alias = "/2"
+#info_type = "available"
+#unit = "GB"
+#interval = 20
+#warning = 20.0
+#alert = 10.0
+
+[[block]]
+block = "disk_space"
+path = "/tmp"
+alias = "/tmp"
+info_type = "available"
+unit = "GB"
+interval = 20
+warning = 7.0
+alert = 3.0
+
+
+
+[[block]]
+block = "net"
+device = "wlp3s0"
+ssid = true
+signal_strength =false 
+ip = false
+speed_up = true 
+graph_up = false 
+interval = 5
+
+[[block]]
+block = "custom"
+command = "timeout .5 dig +short myip.opendns.com @resolver1.opendns.com"
+#command = "echo ext. `curl -4 icanhazip.com`"
+interval = 10
+
+[[block]]
+block = "docker"
+interval = 2
+format = "{running}/{total}"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "keyboard_layout"
+driver = "setxkbmap"
+interval = 15
+
+[[block]]
+block = "battery"
+driver = "upower"
+format = "{percentage}% {time}"
+
+[[block]]
+block = "time"
+interval = 5
+format = "%d/%m %T"
+
