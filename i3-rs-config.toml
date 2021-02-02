@@ -7,6 +7,13 @@ interval = 1
 format = "{barchart} {utilization}%"
 
 [[block]]
+block = "temperature"
+collapsed = false
+interval = 10
+format = "{min}° min, {max}° max, {average}° avg"
+chip = "coretemp-isa-0000"
+
+[[block]]
 block = "memory"
 display_type = "memory"
 format_mem = "{Mup}%"
