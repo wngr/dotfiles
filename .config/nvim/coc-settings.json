@@ -1,0 +1,12 @@
+{
+  "rust-analyzer.diagnostics.enable": true,
+  "rust-analyzer.inlayHints.chainingHints": true,
+    "languageserver": {
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    }
+  }
+}
