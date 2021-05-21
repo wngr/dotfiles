@@ -112,7 +112,7 @@ format = "%d/%m %T"
 [[block]]
 block = "toggle"
 text = ""
-command_state = "xrandr | grep DP3-1\\ connected | grep -v eDP1"
+command_state = "xrandr | grep DP3-1\\ connected\\ 38 | grep -v eDP1"
 command_on = "~/.screenlayout/dock.sh"
 command_off = "~/.screenlayout/single.sh"
 interval = 5
