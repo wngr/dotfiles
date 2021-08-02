@@ -90,8 +90,8 @@ hmap('n', '<leader>lw', ':Telescope lsp_workspace_diagnostics<CR>')
 
 map('n', '<C-T>', ':NERDTreeToggle<CR>', { silent = true })
 -- search
-map('', '<leader>s', ':Telescope live_grep', { noremap = true })
-map('', '<leader>f', ':Telescope find_files', { noremap = true })
+map('', '<leader>s', ':Telescope live_grep<CR>', { noremap = true })
+map('', '<leader>f', ':Telescope find_files<CR>', { noremap = true })
 
 -- go to previous/next buffer
 map('n', '<leader>m', ':bnext<CR>', { noremap = true })
