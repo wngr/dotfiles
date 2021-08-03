@@ -8,6 +8,12 @@ local fn = vim.fn
 local map = vim.api.nvim_set_keymap
 
 ---
+--color scheme
+vim.opt.termguicolors = true
+--o.background = "light"
+vim.cmd('colorscheme ayu')
+--vim.g.ayu_mirage = true
+
 ---- intuitive splits
 g.splitright = true
 g.splitbelow = true

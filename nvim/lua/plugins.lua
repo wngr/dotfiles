@@ -31,4 +31,7 @@ return require('packer').startup(function()
 --  use 'simrat39/rust-tools.nvim'
 --  use 'nvim-lua/popup.nvim'
 --  use 'nvim-lua/plenary.nvim'
+--
+-- color theme
+  use 'Shatur/neovim-ayu'
 end)
