@@ -25,6 +25,7 @@ o.syntax = 'enable'
 g.joinspaces = false
 
 o.updatetime = 300
+o.textwidth = 70
 opt.spelllang = "en,de"
 opt.tabstop = 2
 opt.showmatch = true
@@ -47,7 +48,7 @@ for _, server in pairs(servers) do
 end
 
 require'lspconfig'.rust_analyzer.setup {
-  on_attach = on_attach,
+--  on_attach = on_attach,
   settings = {
     ["rust-analyzer"] = {
       assist = {
@@ -91,8 +92,8 @@ g.mapleader = ","
 local function bmap(a, b, c) vim.api.nvim_buf_set_keymap(bufnr, a, b, c, { noremap = true, silent = true }) end
 local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, silent = true }) end
 --bmap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
---hmap('n', '<leader>lt', '<Cmd>lua vim.lsp.buf.definition()<CR>')
+--hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
+hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
 --hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
 hmap('n', '<leader>la', ':Telescope lsp_code_actions<CR>')
 --bmap('n', '<leader>lff', '<Cmd>lua vim.lsp.buf.hover()<CR>')
@@ -118,7 +119,7 @@ hmap('n', '<leader>lw', ':Telescope lsp_workspace_diagnostics<CR>')
     -- nnoremap <silent> <LEADER>lw  <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 
-map('n', '<C-T>', ':NERDTreeToggle<CR>', { silent = true })
+map('n', '<C-T>', ':NERDTreeFind<CR>', { silent = true })
 -- search
 map('', '<leader>s', ':Telescope live_grep<CR>', { noremap = true })
 map('', '<leader>f', ':Telescope find_files<CR>', { noremap = true })
