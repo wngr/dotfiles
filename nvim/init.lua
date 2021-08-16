@@ -28,6 +28,7 @@ o.updatetime = 300
 o.textwidth = 70
 opt.spelllang = "en,de"
 opt.tabstop = 2
+opt.expandtab = true
 opt.showmatch = true
 opt.matchtime = 2
 opt.shiftwidth = 2
