@@ -48,7 +48,7 @@ for _, server in pairs(servers) do
   require'lspconfig'[server].setup{on_attach=require'completion'.on_attach}
 end
 
-require'lspconfig'.rust_analyzer.setup {
+require'lspconfig'.rust.setup {
 --  on_attach = on_attach,
   settings = {
     ["rust-analyzer"] = {
