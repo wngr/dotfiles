@@ -25,7 +25,7 @@ o.syntax = 'enable'
 g.joinspaces = false
 
 o.updatetime = 300
-o.textwidth = 70
+o.textwidth = 80
 opt.spelllang = "en,de"
 opt.tabstop = 2
 opt.expandtab = true
@@ -35,6 +35,9 @@ opt.shiftwidth = 2
 opt.sw = 2
 opt.number = true
 opt.syntax = "on"
+opt.undofile = true
+o.colorcolumn = "80"
+o.formatoptions = "cqj" -- t == autoformat
 
 local ts = require 'nvim-treesitter.configs'
 ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
