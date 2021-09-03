@@ -56,21 +56,24 @@ require'lspconfig'.rust.setup {
   settings = {
     ["rust-analyzer"] = {
       assist = {
-        importMergeBehavior = "last",
-        importPrefix = "by_self",
+        importGranularity = "crate",
+        importPrefix = "by_crate",
+        allowMergingIntoGlobImports = false
       },
-      diagnostics = {
-        disabled = { "unresolved-import" }
-      },
+--      diagnostics = {
+--        disabled = { "unresolved-import" }
+--      },
       cargo = {
-          loadOutDirsFromCheck = true
+          loadOutDirsFromCheck = true,
+          allFeatures = true
       },
       procMacro = {
           enable = true
       },
-      checkOnSave = {
-          command = "clippy"
-      },
+
+--      checkOnSave = {
+--          command = "clippy"
+--      },
     }
   }
 }
