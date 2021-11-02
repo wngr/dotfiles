@@ -21,7 +21,7 @@ return require('packer').startup(function()
   use 'neovim/nvim-lspconfig'
 	use 'nvim-lua/lsp_extensions.nvim'
 	use 'nvim-lua/completion-nvim'
-  use 'kabouzeid/nvim-lspinstall'
+  use 'williamboman/nvim-lsp-installer'
 -- 	use 'gfanto/fzf-lsp.nvim'
 
 	-- random

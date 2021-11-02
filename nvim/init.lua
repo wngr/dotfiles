@@ -43,40 +43,57 @@ local ts = require 'nvim-treesitter.configs'
 ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
 
 ----------------------------
--- rust lsp setup
-require'lspinstall'.setup() -- important
+local lsp_installer_servers = require'nvim-lsp-installer.servers'
 
-local servers = require'lspinstall'.installed_servers()
-for _, server in pairs(servers) do
-  require'lspconfig'[server].setup{on_attach=require'completion'.on_attach}
+local ok, rust_analyzer = lsp_installer_servers.get_server("rust_analyzer")
+if ok then
+    if not rust_analyzer:is_installed() then
+        rust_analyzer:install()
+    end
 end
 
-require'lspconfig'.rust.setup {
---  on_attach = on_attach,
-  settings = {
-    ["rust-analyzer"] = {
-      assist = {
-        importGranularity = "crate",
-        importPrefix = "by_crate",
-        allowMergingIntoGlobImports = false
-      },
---      diagnostics = {
---        disabled = { "unresolved-import" }
---      },
-      cargo = {
-          loadOutDirsFromCheck = true,
-          allFeatures = true
-      },
-      procMacro = {
-          enable = true
-      },
+--local servers = require'nvim-lsp-installer'.get_available_servers()
+--for _, server in pairs(servers) do
+--  require'lspconfig'[server].setup{on_attach=require'completion'.on_attach}
+--end
 
---      checkOnSave = {
---          command = "clippy"
---      },
-    }
-  }
-}
+local lsp_installer = require("nvim-lsp-installer")
+
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+
+    -- (optional) Customize the options passed to the server
+    if server.name == "rust_analyzer" then
+      server:setup(
+      {
+        settings = {
+          ["rust-analyzer"] = {
+            assist = {
+              importGranularity = "crate",
+              importPrefix = "by_crate",
+              allowMergingIntoGlobImports = false
+            },
+      --      diagnostics = {
+      --        disabled = { "unresolved-import" }
+      --      },
+            cargo = {
+                loadOutDirsFromCheck = true,
+                allFeatures = true
+            },
+            procMacro = {
+                enable = true
+            },
+
+            checkOnSave = {
+                command = "clippy"
+            },
+          }
+        }
+      }
+      )
+    end
+end)
+
 
 -- Enable diagnostics
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
