@@ -52,10 +52,6 @@ if ok then
     end
 end
 
---local servers = require'nvim-lsp-installer'.get_available_servers()
---for _, server in pairs(servers) do
---  require'lspconfig'[server].setup{on_attach=require'completion'.on_attach}
---end
 
 local lsp_installer = require("nvim-lsp-installer")
 
@@ -76,14 +72,13 @@ lsp_installer.on_server_ready(function(server)
       --      diagnostics = {
       --        disabled = { "unresolved-import" }
       --      },
-            cargo = {
-                loadOutDirsFromCheck = true,
-                allFeatures = true
-            },
-            procMacro = {
-                enable = true
-            },
-
+--            cargo = {
+--                loadOutDirsFromCheck = true,
+--                allFeatures = true
+--            },
+--            procMacro = {
+--                enable = true
+--            },
             checkOnSave = {
                 command = "clippy"
             },
@@ -171,12 +166,44 @@ map('n', '<C-l>', ':wincmd l<CR>', { silent = true })
 ----------------------------
 
 -- Use <Tab> and <S-Tab> to navigate through popup menu
-map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', {expr = true})
-map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
-map('i', '<Tab>', '<Plug>(completion_smart_tab)', {})
-map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', {})
+-- 
+-- Setup Completion
+-- See https://github.com/hrsh7th/nvim-cmp#basic-configuration
+-- Completion behavior
+vim.opt.completeopt = { 'menuone' ,'noinsert', 'noselect' }
+vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
+local cmp = require'cmp'
+cmp.setup({
+  -- Enable LSP snippets
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
 
-opt.completeopt = "menuone,noinsert,noselect"
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+})
 
 
 -- ===========================================

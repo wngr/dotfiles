@@ -20,12 +20,20 @@ return require('packer').startup(function()
 	-- lsp
   use 'neovim/nvim-lspconfig'
 	use 'nvim-lua/lsp_extensions.nvim'
-	use 'nvim-lua/completion-nvim'
   use 'williamboman/nvim-lsp-installer'
 -- 	use 'gfanto/fzf-lsp.nvim'
+    -- Completion framework
+    use 'hrsh7th/nvim-cmp'
 
-	-- random
-	use 'cespare/vim-toml'
+    -- LSP completion source for nvim-cmp
+    use 'hrsh7th/cmp-nvim-lsp'
+
+    -- Snippet completion source for nvim-cmp
+    use 'hrsh7th/cmp-vsnip'
+
+    -- Other usefull completion sources
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-buffer'
 
   -- Rust
 --  use 'simrat39/rust-tools.nvim'
