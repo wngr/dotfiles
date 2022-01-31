@@ -20,13 +20,13 @@ VOL_INCREMENT="3%"
 
 function unmute {
     # Unmute all pulseaudio sinks
-    for sink in $(pacmd list-sinks | grep -oE 'index: [0-9]+' | awk '{ print $2 }'); do
-        pacmd set-sink-mute $sink 0
+    for sink in $(pactl list sinks | grep -oE 'Name: .+' | awk '{ print $2 }'); do
+        pactl set-sink-mute $sink 0
     done
 }
 function mute {
     # Unmute all pulseaudio sinks
-    for sink in $(pacmd list-sinks | grep -oE 'index: [0-9]+' | awk '{ print $2 }'); do
+    for sink in $(pactl list sinks | grep -oE 'Name: .+' | awk '{ print $2 }'); do
         pactl set-sink-mute $sink toggle
     done
 }
@@ -50,18 +50,3 @@ case "$1" in
         exit 1
 esac
 
-# Get current volume
-CURR_VOL=$(amixer get Master | grep -m1 -oE '([[:digit:]]+)%' | cut -d'%' -f1)
-
-# Get mute status
-amixer --card $AMIXER_CARD get Master | grep '\[off\]'
-if [[ $? -eq 0 ]]; then
-    MUTE_OPT="-m"
-else
-    MUTE_OPT=""
-fi
-
-#show volume change via volnoti
-volnoti-show $MUTE_OPT $CURR_VOL
-#trigger i3status reload
-killall -USR1 i3status

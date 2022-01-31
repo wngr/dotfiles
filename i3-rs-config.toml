@@ -101,7 +101,8 @@ interval = 15
 
 [[block]]
 block = "battery"
-driver = "upower"
+# wait for https://github.com/greshake/i3status-rust/pull/1417
+#driver = "upower"
 format = "{percentage} {time} {power}"
 
 [[block]]

@@ -2,7 +2,7 @@
 #bindsym XF86AudioMicMute exec ~/Projects/linux-utils/i3wm/i3MicToggle.sh
 
 function setState {
-for source in $(pacmd list-sources | grep -oE 'index: [0-9]+' | awk '{ print $2 }'); do
+for source in $(pactl list sources | grep -oE 'Name: .+' | awk '{ print $2 }'); do
    echo $source
     pactl set-source-mute $source $1
 done
