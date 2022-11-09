@@ -20,7 +20,9 @@ return require('packer').startup(function()
 	-- lsp
   use 'neovim/nvim-lspconfig'
 	use 'nvim-lua/lsp_extensions.nvim'
-  use 'williamboman/nvim-lsp-installer'
+  use { "williamboman/mason.nvim" }
+--  use 'williamboman/nvim-lsp-installer' deprecated
+  
 -- 	use 'gfanto/fzf-lsp.nvim'
     -- Completion framework
     use 'hrsh7th/nvim-cmp'
