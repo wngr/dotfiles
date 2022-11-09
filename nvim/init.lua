@@ -39,72 +39,107 @@ opt.undofile = true
 o.colorcolumn = "80"
 o.formatoptions = "cqj" -- t == autoformat
 
-local ts = require 'nvim-treesitter.configs'
-ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
+local nvim_lsp = require'lspconfig'
+
+local opts = {
+  tools = { -- rust-tools options
+  autoSetHints = true,
+  hover_with_actions = true,
+  inlay_hints = {
+    show_parameter_hints = false,
+    parameter_hints_prefix = "",
+    other_hints_prefix = "",
+    },
+  },
+
+-- all the opts to send to nvim-lspconfig
+-- these override the defaults set by rust-tools.nvim
+-- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+server = {
+  -- on_attach is a callback called when the language server attachs to the buffer
+  -- on_attach = on_attach,
+  settings = {
+    -- to enable rust-analyzer settings visit:
+    -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+    ["rust-analyzer"] = {
+      -- enable clippy on save
+      checkOnSave = {
+        command = "clippy"
+        },
+      }
+    }
+  },
+}
+
+require('rust-tools').setup(opts)
+
+--local ts = require 'nvim-treesitter.configs'
+--ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
 
 ----------------------------
-local lsp_installer_servers = require'nvim-lsp-installer.servers'
-
-local ok, rust_analyzer = lsp_installer_servers.get_server("rust_analyzer")
-if ok then
-    if not rust_analyzer:is_installed() then
-        rust_analyzer:install()
-    end
-end
-
-
-local lsp_installer = require("nvim-lsp-installer")
-
-lsp_installer.on_server_ready(function(server)
-    local opts = {}
-
-    -- (optional) Customize the options passed to the server
-    if server.name == "rust_analyzer" then
-      server:setup(
-      {
-        settings = {
-          ["rust-analyzer"] = {
-            assist = {
-              importGranularity = "crate",
-              importPrefix = "by_crate",
-              allowMergingIntoGlobImports = false
-            },
-      --      diagnostics = {
-      --        disabled = { "unresolved-import" }
-      --      },
---            cargo = {
---                loadOutDirsFromCheck = true,
---                allFeatures = true
---            },
---            procMacro = {
---                enable = true
---            },
-            checkOnSave = {
-                command = "clippy"
-            },
-          }
-        }
-      }
-      )
-    end
-end)
+--local lsp_installer_servers = require'nvim-lsp-installer.servers'
+--
+--local ok, rust_analyzer = lsp_installer_servers.get_server("rust_analyzer")
+--if ok then
+--    if not rust_analyzer:is_installed() then
+--        rust_analyzer:install()
+--    end
+--end
 
 
--- Enable diagnostics
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    signs = true,
-    update_in_insert = true,
-  }
-)
--- rust-analyzer inlay hints
-function inlay_hints()
-    require('lsp_extensions').inlay_hints({
-        enabled = { "ChainingHint", "ParameterHint", "TypeHint" }
-    })
-end
-vim.cmd('autocmd InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs :lua inlay_hints()')
+-- local lsp_installer = require("nvim-lsp-installer")
+-- 
+-- lsp_installer.on_server_ready(function(server)
+--     -- (optional) Customize the options passed to the server
+--     if server.name == "rust_analyzer" then
+-- 
+--       require('rust-tools').setup({})
+-- --      server:setup(
+-- --      {
+-- --        settings = {
+-- --          ["rust-analyzer"] = {
+-- --            assist = {
+-- --              importGranularity = "crate",
+-- --              importPrefix = "by_crate",
+-- --              allowMergingIntoGlobImports = false
+-- --            },
+-- --      --      diagnostics = {
+-- --      --        disabled = { "unresolved-import" }
+-- --      --      },
+-- ----            cargo = {
+-- ----                loadOutDirsFromCheck = true,
+-- ----                allFeatures = true
+-- ----            },
+-- --            procMacro = {
+-- --                enable = true
+-- --            },
+-- --            checkOnSave = {
+-- --                command = "clippy"
+-- --            },
+-- --          }
+-- --        }
+-- --      }
+-- --      )
+--     end
+-- end)
+-- 
+-- 
+-- 
+-- -- Enable diagnostics
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--   vim.lsp.diagnostic.on_publish_diagnostics, {
+--     virtual_text = true,
+--     signs = true,
+--     update_in_insert = true,
+--   }
+-- )
+-- -- rust-analyzer inlay hints
+-- function inlay_hints()
+--     require('lsp_extensions').inlay_hints({
+--         enabled = { "ChainingHint", "ParameterHint", "TypeHint" }
+--     })
+-- end
+-- vim.cmd('autocmd InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs :lua inlay_hints()')
 
 -- key mapping
 g.mapleader = ","
@@ -113,18 +148,18 @@ local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, 
 --bmap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
 --hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
 hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
---hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
-hmap('n', '<leader>la', ':Telescope lsp_code_actions<CR>')
+hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
+--hmap('n', '<leader>la', ':Telescope vim.lsp.buf.code_action()<CR>')
 --bmap('n', '<leader>lff', '<Cmd>lua vim.lsp.buf.hover()<CR>')
 --bmap('n', '<leader>lfi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
 hmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
 hmap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>')
 --hmap('n', '<leader>lx', '<cmd>lua vim.lsp.buf.references()<CR>')
 hmap('n', '<leader>lx', ':Telescope lsp_references<CR>')
-hmap('n', '<leader>li', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
+hmap('n', '<leader>li', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 
-hmap('n', '<leader>lo', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
-hmap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+hmap('n', '<leader>lo', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+hmap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
 
 --hmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 hmap('n', '<leader>ls', ':Telescope lsp_workspace_symbols<CR>')
@@ -252,7 +287,7 @@ function _G.LspStatus(kind, sym)
     if next(vim.lsp.buf_get_clients(0)) == nil then
         return ''
     end
-    local count = vim.lsp.diagnostic.get_count(0, kind)
+    local count = vim.diagnostic.get(0, kind)
     if count == 0 then 
         return '' 
     else 
@@ -264,10 +299,10 @@ function _G.LspOk()
     if next(vim.lsp.buf_get_clients(0)) == nil then
         return ''
     end
-    local h = vim.lsp.diagnostic.get_count(0, 'Hint')
-    local w = vim.lsp.diagnostic.get_count(0, 'Warning')
-    local e = vim.lsp.diagnostic.get_count(0, 'Error')
-    local i = vim.lsp.diagnostic.get_count(0, 'Info')
+    local h = vim.diagnostic.get(0, 'Hint')
+    local w = vim.diagnostic.get(0, 'Warning')
+    local e = vim.diagnostic.get(0, 'Error')
+    local i = vim.diagnostic.get(0, 'Info')
 
     if h + w + e + i == 0 then
         return 'OK'

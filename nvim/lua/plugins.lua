@@ -27,16 +27,15 @@ return require('packer').startup(function()
 
     -- LSP completion source for nvim-cmp
     use 'hrsh7th/cmp-nvim-lsp'
-
-    -- Snippet completion source for nvim-cmp
     use 'hrsh7th/cmp-vsnip'
+    use 'hrsh7th/vim-vsnip'
 
     -- Other usefull completion sources
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-buffer'
 
   -- Rust
---  use 'simrat39/rust-tools.nvim'
+    use 'simrat39/rust-tools.nvim'
 --  use 'nvim-lua/popup.nvim'
 --  use 'nvim-lua/plenary.nvim'
 --
