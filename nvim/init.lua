@@ -10,6 +10,26 @@ local map = vim.api.nvim_set_keymap
 ---
 --color scheme
 vim.opt.termguicolors = true
+
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- you can specify color or cterm_color instead of specifying both of them
+ -- DevIcon will be appended to `name`
+-- override = {
+--  zsh = {
+--    icon = "",
+--    color = "#428850",
+--    cterm_color = "65",
+--    name = "Zsh"
+--  }
+-- };
+ -- globally enable different highlight colors per icon (default to true)
+ -- if set to false all icons will have the default icon's color
+ color_icons = true;
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+}
 --o.background = "light"
 vim.cmd('colorscheme ayu')
 --vim.g.ayu_mirage = true
@@ -26,6 +46,8 @@ g.joinspaces = false
 
 o.updatetime = 300
 o.textwidth = 80
+opt.textwidth = 80
+opt.wrap = true
 opt.spelllang = "en,de"
 opt.tabstop = 2
 opt.expandtab = true
@@ -38,6 +60,25 @@ opt.syntax = "on"
 opt.undofile = true
 o.colorcolumn = "80"
 o.formatoptions = "cqj" -- t == autoformat
+
+
+-- setup mason first
+require("mason").setup()
+require("mason-lspconfig").setup()
+
+require("mason-lspconfig").setup_handlers {
+    -- The first entry (without a key) will be the default handler
+    -- and will be called for each installed server that doesn't have
+    -- a dedicated handler.
+    function (server_name) -- default handler (optional)
+        require("lspconfig")[server_name].setup {}
+    end,
+    -- Next, you can provide a dedicated handler for specific servers.
+    -- For example, a handler override for the `rust_analyzer`:
+--    ["rust_analyzer"] = function ()
+--        require("rust-tools").setup {}
+--    end
+}
 
 local nvim_lsp = require'lspconfig'
 
@@ -55,16 +96,28 @@ local opts = {
 -- all the opts to send to nvim-lspconfig
 -- these override the defaults set by rust-tools.nvim
 -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-server = {
-  -- on_attach is a callback called when the language server attachs to the buffer
-  -- on_attach = on_attach,
-  settings = {
-    -- to enable rust-analyzer settings visit:
-    -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-    ["rust-analyzer"] = {
-      -- enable clippy on save
-      checkOnSave = {
-        command = "clippy"
+  server = {
+    -- on_attach is a callback called when the language server attachs to the buffer
+    -- on_attach = on_attach,
+    settings = {
+      -- to enable rust-analyzer settings visit:
+      -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+      ["rust-analyzer"] = {
+        -- enable clippy on save
+        checkOnSave = {
+          command = "clippy",
+--          overrideCommand = { "cargo", "clippy", "--message-format=json" },
+--          invocationStrategy = "once",
+--          invocationLocation = "root",
+        },
+        cargo = {
+--          target = "wasm32-unknown-unknown",
+--          buildScripts = {
+--            enable = true,
+--            overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" },
+--            invocationStrategy = "once",
+--            invocationLocation = "root",
+--          }
         },
       }
     }
@@ -72,7 +125,6 @@ server = {
 }
 
 require('rust-tools').setup(opts)
-require("mason").setup()
 
 
 --local ts = require 'nvim-treesitter.configs'
@@ -151,6 +203,7 @@ local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, 
 --hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
 hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
 hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
+hmap('n', '<leader>le', ':TroubleToggle<CR>')
 --hmap('n', '<leader>la', ':Telescope vim.lsp.buf.code_action()<CR>')
 --bmap('n', '<leader>lff', '<Cmd>lua vim.lsp.buf.hover()<CR>')
 --bmap('n', '<leader>lfi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
@@ -165,7 +218,7 @@ hmap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
 
 --hmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 hmap('n', '<leader>ls', ':Telescope lsp_workspace_symbols<CR>')
-hmap('n', '<leader>le', ':Telescope lsp_document_diagnostics<CR>')
+--hmap('n', '<leader>le', ':Telescope lsp_document_diagnostics<CR>')
 hmap('n', '<leader>lw', ':Telescope lsp_workspace_diagnostics<CR>')
 -- https://github.com/gfanto/fzf-lsp.nvim#commands
 
