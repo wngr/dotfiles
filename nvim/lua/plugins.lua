@@ -40,7 +40,9 @@ return require('packer').startup(function()
   -- Rust
     use 'simrat39/rust-tools.nvim'
 --  use 'nvim-lua/popup.nvim'
---  use 'nvim-lua/plenary.nvim'
+    use 'nvim-lua/plenary.nvim'
+    use 'mfussenegger/nvim-dap'
+
 --
 -- color theme
   use 'Shatur/neovim-ayu'
@@ -59,6 +61,8 @@ return require('packer').startup(function()
 }
 use 'folke/lsp-colors.nvim'
 use 'nvim-tree/nvim-web-devicons'
+
+use 'LnL7/vim-nix'
 
 
 end)
