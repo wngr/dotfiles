@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #runs one additional argument, e.g. -n for nofork
 scrot /tmp/screen_locked.png
 convert /tmp/screen_locked.png -scale 10% -scale 1000% /tmp/screen_locked2.png

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Manages audio keys on keyboard in i3 wm and launches volnoti window
 

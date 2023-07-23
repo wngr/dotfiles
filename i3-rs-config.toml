@@ -1,5 +1,5 @@
 [theme]
-theme = "slick"
+theme = "bad-wolf"
 
 [icons]
 icons = "awesome4"
@@ -13,7 +13,7 @@ format = "$icon $barchart $utilization"
 block = "temperature"
 interval = 10
 format = "$icon $min/$max/$average"
-chip = "coretemp-isa-0000"
+chip = "thinkpad-isa-0000"
 
 [[block]]
 block = "memory"
@@ -29,35 +29,35 @@ interval = 20
 warning = 10.0
 alert = 5.0
 
-[[block]]
-block = "disk_space"
-path = "/home"
-format = "$path $available"
-info_type = "available"
-alert_unit = "GB"
-interval = 20
-warning = 10.0
-alert = 5.0
+#[[block]]
+#block = "disk_space"
+#path = "/home"
+#format = "$path $available"
+#info_type = "available"
+#alert_unit = "GB"
+#interval = 20
+#warning = 10.0
+#alert = 5.0
+#
+#[[block]]
+#block = "disk_space"
+#path = "/tmp"
+#format = "$path $available"
+#info_type = "available"
+#alert_unit = "GB"
+#interval = 20
+#warning = 10.0
+#alert = 5.0
 
-[[block]]
-block = "disk_space"
-path = "/tmp"
-format = "$path $available"
-info_type = "available"
-alert_unit = "GB"
-interval = 20
-warning = 10.0
-alert = 5.0
-
-[[block]]
-block = "disk_space"
-path = "/home/ow/2nd-ssd"
-format = "/2 $available"
-info_type = "available"
-alert_unit = "GB"
-interval = 20
-warning = 10.0
-alert = 5.0
+#[[block]]
+#block = "disk_space"
+#path = "/home/ow/2nd-ssd"
+#format = "/2 $available"
+#info_type = "available"
+#alert_unit = "GB"
+#interval = 20
+#warning = 10.0
+#alert = 5.0
 
 [[block]]
 block = "net"
@@ -90,11 +90,14 @@ format = " $icon $signal_strength via $device "
 block = "external_ip"
 format = " $ip "
 #
-[[block]]
-block = "docker"
-interval = 2
-format = "$icon $running/$total"
+#[[block]]
+#block = "docker"
+#interval = 2
+#format = "$icon $running/$total"
 #
+[[block]]
+block = "backlight"
+device = "amdgpu_bl0"
 [[block]]
 block = "sound"
 #
