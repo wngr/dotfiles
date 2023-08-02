@@ -99,7 +99,7 @@
   networking.networkmanager.enable = true;
   networking.wireguard = {
     # FIXME
-    enable = false;
+    enable = true;
     interfaces = {
       wg0 = {
         ips = [ "10.0.41.15/32" ];
@@ -110,12 +110,11 @@
         peers = [
           {
             publicKey = "vVwi6MkTftEJEywZVGcIbeMTQLkaaWkqf4fyJOLtDnU=";
-            # Forward all the traffic via VPN.
             allowedIPs = [ "10.0.41.0/24" "10.0.13.0/24" ];
             endpoint = "wngr.ddns.net:51820";
 
           #  dynamicEndpointRefreshSeconds = 60;
-          #  persistentKeepalive = 25;
+            persistentKeepalive = 25;
           }
         ];
       };
@@ -264,6 +263,8 @@
         extensions = [ "rust-src" ];
       };
     in with pkgs; [
+    traceroute
+    dig
     xss-lock
     i3lock-fancy-rapid
     sudo
