@@ -387,6 +387,7 @@
     shellAliases = {
       ll = "exa -lh";
       lb = "nvim ~/Seafile/logbook/`date +'%Y-%m'`.md";
+      edit = "sudo nvim /etc/nixos/configuration.nix";
       update = "sudo nixos-rebuild switch";
     };
     promptInit = ''
