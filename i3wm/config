@@ -206,7 +206,7 @@ exec --no-startup-id seafile-applet
 #exec --no-startup-id volnoti
 #exec --no-startup-id "/usr/bin/python2.7 /home/ow/src/linux-utils/i3wm/disable-standby-fs.py >> ~/.i3log"
 #exec --no-startup-id "xss-lock /home/ow/src/linux-utils/i3wm/screenshotLock.sh"
-exec --no-startup-id "xss-lock --transfer-sleep-lock -- i3lock-fancy-rapid"
+exec --no-startup-id "xss-lock --transfer-sleep-lock -- i3lock-fancy-rapid 10 1"
 #exec --no-startup-id "v4l2-ctl -d /dev/video2 -c power_line_frequency=1"
 #exec --no-startup-id "xinput set-prop 'TPPS/2 IBM TrackPoint' 307 .6"
 # increase evince max zoom level
