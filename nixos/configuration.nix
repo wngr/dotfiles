@@ -99,7 +99,7 @@
   networking.networkmanager.enable = true;
   networking.wireguard = {
     # FIXME
-    enable = true;
+    enable = false;
     interfaces = {
       wg0 = {
         ips = [ "10.0.41.15/32" ];
@@ -120,6 +120,7 @@
       };
     };
   };
+  programs.adb.enable = true;
   # run unpatched binaries that look for a link-loader in eg `/lib64/ld-linux-x86-64.so.2`
   programs.nix-ld.enable = true;
   programs.nm-applet.enable = true;
@@ -159,6 +160,44 @@
 #        '';
     };
   };
+  services.autorandr = {
+    enable = true;
+    profiles = {
+      "laptop" = {
+        fingerprint = {
+	  eDP-1 = "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
+	};
+	config = {
+          eDP-1 = {
+            enable = true;
+            mode = "1920x1200";
+            position = "0x0";
+            primary = true;
+          };
+          DP-2.enable = false;
+	};
+      };
+      "büro" = {
+        fingerprint = {
+	  eDP-1 = "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
+	  DP-2 = "00ffffffffffff0010acf1a04c564430181c010380582578eeee95a3544c99260f5054a54b00714f81008180a940d1c0010101010101264d00a0f0402e6030203a00706f3100001a000000ff00354b4330333836453044564c0a000000fc0044454c4c20553338313844570a000000fd001855197328000a20202020202001ad02032af14d9010040302040401011f1f135a230907078301000067030c00100000446700000001788003023a801871382d40582c4500706f3100001e565e00a0a0a0295030203500706f3100001acd4600a0a0381f4030203a00706f3100001a134c00a0f040176030203a00706f3100001a00000000000000000000000000b5";
+	};
+	config = {
+          eDP-1 = {
+            enable = true;
+            mode = "1920x1200";
+            position = "0x0";
+            primary = true;
+          };
+	  DP-2 = {
+	    enable = true;
+	    mode = "3840x1600";
+	    position = "1920x0";
+	  };
+	};
+      };
+    };
+  };
   services.fwupd.enable = true;
   services.tlp = {
     enable = true;
@@ -192,7 +231,7 @@
     ow = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "docker" "audio" "video" "input" "lp" ];
+      extraGroups = [ "wheel" "networkmanager" "docker" "audio" "video" "input" "lp" "adbusers" ];
       description = "ow";
       shell = pkgs.zsh;
       hashedPassword = "$6$aPt0yEG6l8vWNq6x$M/wro68epL0uKTs0nyEeVXpCeTJWp1oKYhz4V4.4g9kFOLMmbAyOrDRsOVMBOM/xS9m6J.nsPOgykw0Cki95x1";
@@ -263,6 +302,7 @@
         extensions = [ "rust-src" ];
       };
     in with pkgs; [
+    arandr
     traceroute
     dig
     xss-lock
@@ -314,6 +354,8 @@
     imagemagick
     atuin
     exa
+    pdfarranger
+    fd
     bat
     fzf
     gnome.nautilus
