@@ -5,29 +5,23 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
+  boot.initrd.secrets = { "/crypto_keyfile.bin" = null; };
 
   boot.kernelModules = [
-  # external optical drive support
+    # external optical drive support
     "sg"
   ];
 
-  nix.settings.experimental-features = [
-    "flakes"
-    "nix-command"
-  ];
+  nix.settings.experimental-features = [ "flakes" "nix-command" ];
 
   virtualisation.docker.enable = true;
   systemd.services.wireless-driver-on-resume = {
@@ -45,48 +39,50 @@
     ath11k-suspend = {
       enable = false;
       description = "Remove ath11k_pci kernel module";
-      wantedBy = [ 
+      wantedBy = [
         "sleep.target"
-	"hibernate.target"
-	"suspend.target"
-	"suspend-then-hibernate.target"
+        "hibernate.target"
+        "suspend.target"
+        "suspend-then-hibernate.target"
       ];
       before = [
         "sleep.target"
-	"hibernate.target"
-	"suspend.target"
-	"suspend-then-hibernate.target"
+        "hibernate.target"
+        "suspend.target"
+        "suspend-then-hibernate.target"
       ];
       serviceConfig = {
         Type = "simple";
-	ExecStart = "${pkgs.kmod}/bin/modprobe ath11k_pci --remove";
+        ExecStart = "${pkgs.kmod}/bin/modprobe ath11k_pci --remove";
       };
     };
     ath11k-resume = {
       enable = false;
       description = "Load ath11k_pci kernel module";
-      wantedBy = [ 
+      wantedBy = [
         "sleep.target"
-	"hibernate.target"
-	"suspend.target"
-	"suspend-then-hibernate.target"
+        "hibernate.target"
+        "suspend.target"
+        "suspend-then-hibernate.target"
       ];
       after = [
         "sleep.target"
-	"hibernate.target"
-	"suspend.target"
-	"suspend-then-hibernate.target"
+        "hibernate.target"
+        "suspend.target"
+        "suspend-then-hibernate.target"
       ];
       serviceConfig = {
         Type = "simple";
-	ExecStart = "${pkgs.kmod}/bin/modprobe ath11k_pci";
+        ExecStart = "${pkgs.kmod}/bin/modprobe ath11k_pci";
       };
     };
   };
 
   # Enable swap on luks
-  boot.initrd.luks.devices."luks-e5556ac1-76f9-4684-865d-d38e66a32541".device = "/dev/disk/by-uuid/e5556ac1-76f9-4684-865d-d38e66a32541";
-  boot.initrd.luks.devices."luks-e5556ac1-76f9-4684-865d-d38e66a32541".keyFile = "/crypto_keyfile.bin";
+  boot.initrd.luks.devices."luks-e5556ac1-76f9-4684-865d-d38e66a32541".device =
+    "/dev/disk/by-uuid/e5556ac1-76f9-4684-865d-d38e66a32541";
+  boot.initrd.luks.devices."luks-e5556ac1-76f9-4684-865d-d38e66a32541".keyFile =
+    "/crypto_keyfile.bin";
 
   networking.hostName = "black-dove"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -104,19 +100,17 @@
       wg0 = {
         ips = [ "10.0.41.15/32" ];
         listenPort = 51820;
-  
+
         privateKeyFile = "/home/ow/wg-pallas.key";
-  
-        peers = [
-          {
-            publicKey = "vVwi6MkTftEJEywZVGcIbeMTQLkaaWkqf4fyJOLtDnU=";
-            allowedIPs = [ "10.0.41.0/24" "10.0.13.0/24" ];
-            endpoint = "wngr.ddns.net:51820";
+
+        peers = [{
+          publicKey = "vVwi6MkTftEJEywZVGcIbeMTQLkaaWkqf4fyJOLtDnU=";
+          allowedIPs = [ "10.0.41.0/24" "10.0.13.0/24" ];
+          endpoint = "wngr.ddns.net:51820";
 
           #  dynamicEndpointRefreshSeconds = 60;
-            persistentKeepalive = 25;
-          }
-        ];
+          persistentKeepalive = 25;
+        }];
       };
     };
   };
@@ -145,19 +139,19 @@
   };
   services = {
     redshift = {
-        enable = true;
-        brightness.night = "0.97";
-        temperature = {
-          day = 6500;
-          night = 4000;
-        };
+      enable = true;
+      brightness.night = "0.97";
+      temperature = {
+        day = 6500;
+        night = 4000;
+      };
     };
     printing = {
-        enable = true;
-	drivers = with pkgs; [ hplipWithPlugin cups-filters ];
-#	extraConf = ''
-#          Option pdftops-renderer pdftops
-#        '';
+      enable = true;
+      drivers = with pkgs; [ hplipWithPlugin cups-filters ];
+      #	extraConf = ''
+      #          Option pdftops-renderer pdftops
+      #        '';
     };
   };
   services.autorandr = {
@@ -165,9 +159,10 @@
     profiles = {
       "laptop" = {
         fingerprint = {
-	  eDP-1 = "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
-	};
-	config = {
+          eDP-1 =
+            "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
+        };
+        config = {
           eDP-1 = {
             enable = true;
             mode = "1920x1200";
@@ -175,26 +170,28 @@
             primary = true;
           };
           DP-2.enable = false;
-	};
+        };
       };
       "büro" = {
         fingerprint = {
-	  eDP-1 = "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
-	  DP-2 = "00ffffffffffff0010acf1a04c564430181c010380582578eeee95a3544c99260f5054a54b00714f81008180a940d1c0010101010101264d00a0f0402e6030203a00706f3100001a000000ff00354b4330333836453044564c0a000000fc0044454c4c20553338313844570a000000fd001855197328000a20202020202001ad02032af14d9010040302040401011f1f135a230907078301000067030c00100000446700000001788003023a801871382d40582c4500706f3100001e565e00a0a0a0295030203500706f3100001acd4600a0a0381f4030203a00706f3100001a134c00a0f040176030203a00706f3100001a00000000000000000000000000b5";
-	};
-	config = {
+          eDP-1 =
+            "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
+          DP-2 =
+            "00ffffffffffff0010acf1a04c564430181c010380582578eeee95a3544c99260f5054a54b00714f81008180a940d1c0010101010101264d00a0f0402e6030203a00706f3100001a000000ff00354b4330333836453044564c0a000000fc0044454c4c20553338313844570a000000fd001855197328000a20202020202001ad02032af14d9010040302040401011f1f135a230907078301000067030c00100000446700000001788003023a801871382d40582c4500706f3100001e565e00a0a0a0295030203500706f3100001acd4600a0a0381f4030203a00706f3100001a134c00a0f040176030203a00706f3100001a00000000000000000000000000b5";
+        };
+        config = {
           eDP-1 = {
             enable = true;
             mode = "1920x1200";
             position = "0x0";
             primary = true;
           };
-	  DP-2 = {
-	    enable = true;
-	    mode = "3840x1600";
-	    position = "1920x0";
-	  };
-	};
+          DP-2 = {
+            enable = true;
+            mode = "3840x1600";
+            position = "1920x0";
+          };
+        };
       };
     };
   };
@@ -220,9 +217,7 @@
 
     windowManager.i3 = {
       enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-      ];
+      extraPackages = with pkgs; [ dmenu ];
     };
   };
 
@@ -231,43 +226,47 @@
     ow = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "docker" "audio" "video" "input" "lp" "adbusers" ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "docker"
+        "audio"
+        "video"
+        "input"
+        "lp"
+        "adbusers"
+      ];
       description = "ow";
       shell = pkgs.zsh;
-      hashedPassword = "$6$aPt0yEG6l8vWNq6x$M/wro68epL0uKTs0nyEeVXpCeTJWp1oKYhz4V4.4g9kFOLMmbAyOrDRsOVMBOM/xS9m6J.nsPOgykw0Cki95x1";
-      packages = with pkgs; [];
-      openssh.authorizedKeys.keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTWEixQfURJSWbemWs0acolczYT8331DhTOG7orFAIDHylBx6s+3bDl/GZuzaRqyUHNSGy7SqvsGYSiX249MkbS3B+koaINmjXyBcDRVuKUiDdYz56UzsM7XSJieEe2IGxjUPsDS+Y25FIP0UwhKClYJh+77EgUHixMuwJHMf1BHbE1tefhkMBwAhZxTSgcNBKTRPPQVoWSN4JIGohg8Tj3zCSls1wYWwKASsHXa/9/JH5nEQM+XpUUwXL1ACsP6Ei3P/h6d5zCgYwG9pYRSIAN4MPokuM549Jnrsv9Gki/Bmk38ALLYp7c+d2/4HrtVh8+bXd9MdeK+eiRMUn3pZz3tsUWdH5qSIgV4ef0ujEba7GMvY+WCCaBb/kIdgHY1cgXyQjdn6r3nXk5ZHfLFcUt/xmzwgEVQqwn10paftA92Z0nbI5V6ERvWWWxLOfQBgQGGRIqGwpe3wUfr/vHYzgVmFQujK/7HTJ01K0MiH06mwdudj3ap1Oco3FHpcoIDglMIqWhcPo/vpHpejO4XXMedURia2Oq/v3hN67iWDqST29WlQohav1F8GFpYEHVD1LvnJ/CRgd84ET79VUaq+TtHsoOSxWhODrNERkCeov5amXsHSHgNJ6L118FRoGrqYG7Eb9Z87o2a7ObNmdctNe63npoj0ngoPqvArb1tjlzQ== ow@t440s"];
+      hashedPassword =
+        "$6$aPt0yEG6l8vWNq6x$M/wro68epL0uKTs0nyEeVXpCeTJWp1oKYhz4V4.4g9kFOLMmbAyOrDRsOVMBOM/xS9m6J.nsPOgykw0Cki95x1";
+      packages = with pkgs; [ ];
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTWEixQfURJSWbemWs0acolczYT8331DhTOG7orFAIDHylBx6s+3bDl/GZuzaRqyUHNSGy7SqvsGYSiX249MkbS3B+koaINmjXyBcDRVuKUiDdYz56UzsM7XSJieEe2IGxjUPsDS+Y25FIP0UwhKClYJh+77EgUHixMuwJHMf1BHbE1tefhkMBwAhZxTSgcNBKTRPPQVoWSN4JIGohg8Tj3zCSls1wYWwKASsHXa/9/JH5nEQM+XpUUwXL1ACsP6Ei3P/h6d5zCgYwG9pYRSIAN4MPokuM549Jnrsv9Gki/Bmk38ALLYp7c+d2/4HrtVh8+bXd9MdeK+eiRMUn3pZz3tsUWdH5qSIgV4ef0ujEba7GMvY+WCCaBb/kIdgHY1cgXyQjdn6r3nXk5ZHfLFcUt/xmzwgEVQqwn10paftA92Z0nbI5V6ERvWWWxLOfQBgQGGRIqGwpe3wUfr/vHYzgVmFQujK/7HTJ01K0MiH06mwdudj3ap1Oco3FHpcoIDglMIqWhcPo/vpHpejO4XXMedURia2Oq/v3hN67iWDqST29WlQohav1F8GFpYEHVD1LvnJ/CRgd84ET79VUaq+TtHsoOSxWhODrNERkCeov5amXsHSHgNJ6L118FRoGrqYG7Eb9Z87o2a7ObNmdctNe63npoj0ngoPqvArb1tjlzQ== ow@t440s"
+      ];
     };
     root = {
       shell = pkgs.zsh;
-      hashedPassword = "$6$aPt0yEG6l8vWNq6x$M/wro68epL0uKTs0nyEeVXpCeTJWp1oKYhz4V4.4g9kFOLMmbAyOrDRsOVMBOM/xS9m6J.nsPOgykw0Cki95x1";
+      hashedPassword =
+        "$6$aPt0yEG6l8vWNq6x$M/wro68epL0uKTs0nyEeVXpCeTJWp1oKYhz4V4.4g9kFOLMmbAyOrDRsOVMBOM/xS9m6J.nsPOgykw0Cki95x1";
     };
   };
 
   nixpkgs = {
     overlays = let
       rustOverlay = import (builtins.fetchTarball
-        "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"
-      );
-    in [
-      rustOverlay
-    ];
+        "https://github.com/oxalica/rust-overlay/archive/master.tar.gz");
+    in [ rustOverlay ];
 
-    config = {
-      allowUnfree = true;
-    };
+    config = { allowUnfree = true; };
   };
 
   # ssh access
   services.openssh.enable = false;
 
   environment = {
-    variables = {
-      EDITOR = "nvim";
-    };
-    sessionVariables = {
-      GTK_THEME = "Adwaita:dark";
-    };
+    variables = { EDITOR = "nvim"; };
+    sessionVariables = { GTK_THEME = "Adwaita:dark"; };
 
     etc = {
       "xdg/gtk-2.0/gtkrc".text = ''
@@ -298,10 +297,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = let
-      rust = pkgs.rust-bin.stable.latest.default.override {
-        extensions = [ "rust-src" ];
-      };
-    in with pkgs; [
+    rust = pkgs.rust-bin.stable.latest.default.override {
+      extensions = [ "rust-src" ];
+    };
+  in with pkgs; [
     arandr
     traceroute
     dig
@@ -390,37 +389,36 @@
       #iosevka
       source-code-pro
     ];
-    
+
     fontconfig = {
       enable = true;
       defaultFonts = {
         serif = [ "Ubuntu" ];
         sansSerif = [ "Ubuntu" ];
-        monospace = [ "source-code-pro" ]; #"iosevka" ];
+        monospace = [ "source-code-pro" ]; # "iosevka" ];
       };
     };
   };
 
   # to manipulate monitor background brightness
 
-
   programs.git = {
     enable = true;
     config = {
       user = {
         email = "oliver@wngr.de";
-	name = "Oliver Wangler";
+        name = "Oliver Wangler";
       };
     };
   };
   # lock done via xss-lock started in i3 config
-#  programs.xss-lock = {
-#    enable = true;
-#    extraOptions = [ "--transfer-sleep-lock" ];
-#    lockerCommand = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid 10 10";
-#  };
+  #  programs.xss-lock = {
+  #    enable = true;
+  #    extraOptions = [ "--transfer-sleep-lock" ];
+  #    lockerCommand = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid 10 10";
+  #  };
   programs.light.enable = true;
-#  programs.i3lock.enable = true;
+  #  programs.i3lock.enable = true;
   programs.zsh = {
     enable = true;
     autosuggestions.enable = true;
@@ -437,11 +435,7 @@
     '';
     ohMyZsh = {
       enable = true;
-      plugins = [
-        "git"
-        "gpg-agent"
-        "vi-mode"
-      ];
+      plugins = [ "git" "gpg-agent" "vi-mode" ];
       theme = "robbyrussell";
     };
   };
@@ -470,15 +464,15 @@
   services.clipmenu.enable = true;
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
-  
+
   services.upower.enable = true;
- 
+
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
-  networking.firewall.allowedUDPPorts = [ 
-    51820 #wireguard
+  networking.firewall.allowedUDPPorts = [
+    51820 # wireguard
   ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
