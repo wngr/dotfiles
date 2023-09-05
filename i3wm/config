@@ -196,8 +196,9 @@ bar {
 
 #exec --no-startup-id "xrandr --dpi 220"
 #exec --no-startup-id "feh --bg-fill .desktopbackground"
-exec --no-startup-id "/bin/bash /home/ow/Seafile/0_me/Linux/Scripts/encfs_docs.sh"
-#exec --no-startup-id keepassxc
+exec --no-startup-id "bash /home/ow/Seafile/0_me/Linux/Scripts/encfs_docs.sh"
+exec --no-startup-id keepassxc
+exec --no-startup-id systemctl stop wireguard-wg0
 #exec --no-startup-id "setxkbmap us -option compose:ralt"
 #exec --no-startup-id "/bin/bash /home/ow/Seafile/0_me/Linux/Scripts/redshift.sh"
 exec --no-startup-id seafile-applet
