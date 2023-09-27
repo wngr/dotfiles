@@ -116,6 +116,11 @@ require("mason-lspconfig").setup_handlers {
             -- to enable rust-analyzer settings visit:
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             ["rust-analyzer"] = {
+              imports = {
+                group = {
+                  enable = false,
+                },
+              },
               diagnostics = {
                 enable = true,
                 disabled = {"unresolved-proc-macro"},

@@ -24,6 +24,8 @@
   nix.settings.experimental-features = [ "flakes" "nix-command" ];
 
   virtualisation.docker.enable = true;
+  # https://github.com/NixOS/nixpkgs/issues/180175
+  systemd.services.NetworkManager-wait-online.enable = false;
   systemd.services.wireless-driver-on-resume = {
     enable = false;
     description = "Reload the wireless driver on system resumt";
@@ -315,6 +317,7 @@
       extensions = [ "rust-src" ];
     };
   in with pkgs; [
+    sshfs
     arandr
     traceroute
     dig
@@ -366,7 +369,7 @@
     scrot
     imagemagick
     atuin
-    exa
+    eza
     pdfarranger
     fd
     bat
@@ -391,7 +394,7 @@
     thunderbird
   ];
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       font-awesome_4
       noto-fonts
       noto-fonts-cjk
@@ -439,7 +442,7 @@
     syntaxHighlighting.enable = true;
     histSize = 100000;
     shellAliases = {
-      ll = "exa -lh";
+      ll = "eza -lh";
       lb = "nvim ~/Seafile/logbook/`date +'%Y-%m'`.md";
       edit = "sudo nvim /etc/nixos/configuration.nix";
       update = "sudo nixos-rebuild switch";
@@ -470,10 +473,10 @@
   # List services that you want to enable:
   # fprint
   # FIXME
-  services.fprintd.enable = true;
-  #services.fprintd.tod.enable = true;
-  security.pam.services.login.fprintAuth = true;
-  security.pam.services.xscreensaver.fprintAuth = true;
+  #services.fprintd.enable = true;
+  ##services.fprintd.tod.enable = true;
+  #security.pam.services.login.fprintAuth = true;
+  #security.pam.services.xscreensaver.fprintAuth = true;
 
   services.clipmenu.enable = true;
   services.gnome.gnome-keyring.enable = true;
