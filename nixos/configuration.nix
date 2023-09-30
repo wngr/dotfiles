@@ -101,7 +101,7 @@
   services.resolved.enable = true;
   networking.wireguard = {
     # FIXME
-    enable = true;
+    enable = false;
     interfaces = {
       wg0 = {
         ips = [ "10.0.41.15/32" ];
@@ -161,11 +161,16 @@
     };
     printing = {
       enable = true;
-      drivers = with pkgs; [ hplipWithPlugin cups-filters ];
+      drivers = with pkgs; [
+        hplipWithPlugin
+        cups-filters
+        samsung-unified-linux-driver
+      ];
       #	extraConf = ''
       #          Option pdftops-renderer pdftops
       #        '';
     };
+
     # smb etc
     gvfs.enable = true;
   };
@@ -317,6 +322,7 @@
       extensions = [ "rust-src" ];
     };
   in with pkgs; [
+    chromium
     sshfs
     arandr
     traceroute
