@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #bindsym XF86AudioMicMute exec ~/Projects/linux-utils/i3wm/i3MicToggle.sh
 
 function setState {
