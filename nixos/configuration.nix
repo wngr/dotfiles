@@ -152,11 +152,15 @@
   };
   services = {
     redshift = {
+      executable = "/bin/redshift-gtk";
       enable = true;
-      brightness.night = "0.97";
+      brightness = {
+        day = "1";
+        night = "1";
+      };
       temperature = {
         day = 6500;
-        night = 4000;
+        night = 3000;
       };
     };
     printing = {
