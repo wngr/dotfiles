@@ -117,6 +117,9 @@ require("mason-lspconfig").setup_handlers {
             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
             ["rust-analyzer"] = {
               imports = {
+                granularity = {
+                  group = "crate",
+                },
                 group = {
                   enable = false,
                 },
@@ -127,20 +130,23 @@ require("mason-lspconfig").setup_handlers {
                 enableExperimental = true,
               },
               -- enable clippy on save
-              checkOnSave = {
+              checkOnSave = true,
+              check = {
                 command = "clippy",
-                --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" },
+                --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" }, -- wasm
       --          invocationStrategy = "once",
-      --          invocationLocation = "root",
+                --invocationLocation = "root",
               },
-              procMacro = {
-                enable = true,
-              },
+--              procMacro = { -- enabled by default now
+--                enable = true,
+--              },
               cargo = {
-                --target = "wasm32-unknown-unknown",
+                --noDefaultFeatures = "XXXXX",
+                --features = "all",
+--                target = "wasm32-unknown-unknown", -- wasm
                 buildScripts = {
                   enable = true,
-      --            overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" },
+--                  overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" }, -- wasm
       --            invocationStrategy = "once",
       --            invocationLocation = "root",
                 }
