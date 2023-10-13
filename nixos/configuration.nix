@@ -397,6 +397,7 @@
     i3status-rust
     signal-desktop
     alacritty
+    wezterm
     neovim
     wget
     curl
