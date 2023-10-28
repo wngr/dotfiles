@@ -61,7 +61,7 @@ alert = 5.0
 
 [[block]]
 block = "net"
-format = " $icon $signal_strength via $device "
+format = " $icon {$signal_strength $ssid $frequency |}$device $ip $speed_down/$speed_up "
 
 #[[block]]
 #block = "net"
