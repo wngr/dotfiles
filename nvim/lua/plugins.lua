@@ -22,6 +22,7 @@ return require('packer').startup(function()
 	use 'nvim-lua/lsp_extensions.nvim'
   use { "williamboman/mason.nvim" }
   use 'williamboman/mason-lspconfig.nvim'
+  use 'folke/todo-comments.nvim'
 --  use 'williamboman/nvim-lsp-installer' deprecated
   
 -- 	use 'gfanto/fzf-lsp.nvim'

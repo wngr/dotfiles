@@ -124,33 +124,33 @@ require("mason-lspconfig").setup_handlers {
                   enable = false,
                 },
               },
-              diagnostics = {
-                enable = true,
-                disabled = {"unresolved-proc-macro"},
-                enableExperimental = true,
-              },
+ --             diagnostics = {
+ --               enable = true,
+ --               disabled = {"unresolved-proc-macro"},
+ --               enableExperimental = true,
+ --             },
               -- enable clippy on save
-              checkOnSave = true,
-              check = {
-                command = "clippy",
+--              checkOnSave = true,
+--              check = {
+--                command = "clippy",
                 --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" }, -- wasm
       --          invocationStrategy = "once",
                 --invocationLocation = "root",
-              },
+--              },
 --              procMacro = { -- enabled by default now
 --                enable = true,
 --              },
-              cargo = {
+     --         cargo = {
                 --noDefaultFeatures = "XXXXX",
                 --features = "all",
 --                target = "wasm32-unknown-unknown", -- wasm
-                buildScripts = {
-                  enable = true,
+     --           buildScripts = {
+     --             enable = true,
 --                  overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" }, -- wasm
       --            invocationStrategy = "once",
       --            invocationLocation = "root",
-                }
-              },
+    --            }
+      --        },
             }
           }
         },
@@ -237,6 +237,7 @@ local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, 
 --hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
 hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
 hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
+--hmap('n', '<leader>la', ':RustHoverActions<CR>')
 hmap('n', '<leader>le', ':TroubleToggle<CR>')
 --hmap('n', '<leader>la', ':Telescope vim.lsp.buf.code_action()<CR>')
 --bmap('n', '<leader>lff', '<Cmd>lua vim.lsp.buf.hover()<CR>')
@@ -328,6 +329,16 @@ cmp.setup({
     { name = 'buffer' },
   },
 })
+require("todo-comments").setup(
+{
+  highlight = {
+    pattern = { [[.*<(KEYWORDS).*:]], [[.*\@(KEYWORDS).*]] },
+  },
+  search = {
+    pattern = [[\b(KEYWORDS)\b]],
+  },
+}
+)
 
 
 -- ===========================================
