@@ -7,17 +7,17 @@ icons = "awesome4"
 [[block]]
 block = "cpu"
 interval = 1
-format = "$icon $barchart $utilization"
+format = "$icon $utilization"
 
 [[block]]
 block = "temperature"
 interval = 10
-format = "$icon $min/$max/$average"
+format = "$min/$max/$average"
 chip = "thinkpad-isa-0000"
 
 [[block]]
 block = "memory"
-format = "$icon$mem_used_percents $icon_swap$swap_used_percents"
+format = "$icon$mem_used_percents"
 
 [[block]]
 block = "disk_space"
@@ -61,7 +61,7 @@ alert = 5.0
 
 [[block]]
 block = "net"
-format = " $icon {$signal_strength $ssid $frequency |}$device $ip $speed_down/$speed_up "
+format = " $icon {$signal_strength $ssid $frequency |} $ip $speed_down/$speed_up "
 
 #[[block]]
 #block = "net"
@@ -88,7 +88,7 @@ format = " $icon {$signal_strength $ssid $frequency |}$device $ip $speed_down/$s
 #interval = 10
 [[block]]
 block = "external_ip"
-format = " $ip "
+format = "$ip"
 #
 #[[block]]
 #block = "docker"
@@ -97,7 +97,7 @@ format = " $ip "
 #
 [[block]]
 block = "backlight"
-device = "amdgpu_bl0"
+device = "amdgpu_bl1"
 [[block]]
 block = "sound"
 #
