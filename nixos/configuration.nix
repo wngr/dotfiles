@@ -99,6 +99,11 @@
     dns = "systemd-resolved";
   };
   services.resolved.enable = true;
+
+  # mount iphone
+  services.usbmuxd.enable = true;
+  # iphone end
+
   networking.wireguard = {
     # FIXME
     enable = false;
@@ -111,18 +116,38 @@
 
         peers = [{
           publicKey = "vVwi6MkTftEJEywZVGcIbeMTQLkaaWkqf4fyJOLtDnU=";
-          allowedIPs = [ "10.0.41.0/24" "10.0.13.0/24" ];
+          allowedIPs = [ "0.0.0.0/8" "10.0.41.0/24" "10.0.13.0/24" ];
           endpoint = "wngr.ddns.net:51820";
 
-          #  dynamicEndpointRefreshSeconds = 60;
+          dynamicEndpointRefreshSeconds = 600;
           persistentKeepalive = 25;
         }];
         postSetup = ''
           resolvectl dns    wg0 10.0.13.251
-          resolvectl domain wg0 ~home.wngr.de
-          resolvectl dnssec wg0 false
+          #resolvectl domain wg0 ~home.wngr.de
+          #resolvectl dnssec wg0 false
         '';
       };
+      fritzbox = {
+        ips = [ "192.168.178.201/24" ];
+        listenPort = 51821;
+
+        privateKeyFile = "/home/ow/wg-fritzbox.key";
+
+        peers = [{
+          publicKey = "N4hHM8YP8B4nmzbM1uCWIOEaS+JOJLSrNVoMpj8/c3M=";
+          presharedKeyFile = "/home/ow/wg-fritzbox-psk.key";
+          allowedIPs = [ "192.168.178.0/24" ];
+
+          #myfritz.net endpoint also resolves ipv6
+          #endpoint = "09pat8pe4olim7iv.myfritz.net:53961";
+          endpoint = "wngr.ddns.net:53961";
+
+          dynamicEndpointRefreshSeconds = 600;
+          persistentKeepalive = 25;
+        }];
+      };
+
     };
   };
   systemd.services."wireguard-wg0".wantedBy = lib.mkForce [ ];
@@ -178,6 +203,7 @@
     # smb etc
     gvfs.enable = true;
   };
+
   services.autorandr = {
     enable = true;
     profiles = {
@@ -218,6 +244,28 @@
           };
         };
       };
+      "tv" = {
+        # `autorandr --fingerprint`
+        fingerprint = {
+          eDP-1 =
+            "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
+          HDMI-1 =
+            "00ffffffffffff0034a901c30101010100140103800000780adaffa3584aa22917494b00000001010101010101010101010101010101023a80d072382d40102c4580ba882100001e023a801871382d40582c4500ba882100001e000000fc0050616e61736f6e69632d54560a000000fd00173d0f440f000a202020202020015302032272509f9014052013041203110216071506012309070168030c001000b8260f011d80d0721c1620102c2580ba882100009e011d8018711c1620582c2500ba882100009e011d00bc52d01e20b8285540ba882100001e011d007251d01e206e285500ba882100001e8c0ad090204031200c405500ba88210000180000000a";
+        };
+        config = {
+          eDP-1 = {
+            enable = true;
+            mode = "1920x1200";
+            position = "0x0";
+            primary = true;
+          };
+          HDMI-1 = {
+            enable = true;
+            mode = "1920x1080";
+            position = "1920x0";
+          };
+        };
+      };
     };
   };
   services.fwupd.enable = true;
@@ -229,14 +277,16 @@
     };
   };
   # Configure keymap in X11
+  services.displayManager.defaultSession = "none+i3";
   services.xserver = {
     enable = true;
     autorun = true;
-    layout = "us";
-    xkbVariant = "";
-    xkbOptions = "compose:ralt";
+    xkb = {
+      layout = "us";
+      variant = "";
+      options = "compose:ralt";
+    };
     desktopManager.xterm.enable = false;
-    displayManager.defaultSession = "none+i3";
     displayManager.lightdm.enable = true;
     displayManager.lightdm.greeters.gtk.theme.name = "Adwaita-dark";
 
@@ -283,7 +333,14 @@
         "https://github.com/oxalica/rust-overlay/archive/master.tar.gz");
     in [ rustOverlay ];
 
-    config = { allowUnfree = true; };
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+
+        "electron-25.9.0" # https://discourse.nixos.org/t/flake-still-using-old-packages/36859/8
+
+      ];
+    };
   };
 
   # ssh access
@@ -326,6 +383,11 @@
       extensions = [ "rust-src" ];
     };
   in with pkgs; [
+    calibre
+    tor-browser
+    wireguard-tools
+    obsidian
+    nix-index
     chromium
     sshfs
     arandr
@@ -362,16 +424,18 @@
     cargo-outdated
     cargo-bloat
     cargo-edit
+    cargo-watch
+    watchexec
     rust
     rust-analyzer
     gcc
     libreoffice
     tree
-    gnome.zenity
+    zenity
     encfs
     portfolio
     remmina
-    gnome.gnome-screenshot
+    gnome-screenshot
     bash
     pciutils
     easyeffects
@@ -384,7 +448,7 @@
     fd
     bat
     fzf
-    gnome.nautilus
+    nautilus
     keepassxc
     mosh
     borgbackup
@@ -403,6 +467,10 @@
     curl
     firefox
     thunderbird
+    yt-dlp
+
+    libimobiledevice # iphone
+    ifuse # optional, to mount using 'ifuse'
   ];
   fonts = {
     packages = with pkgs; [
@@ -455,7 +523,7 @@
     shellAliases = {
       ll = "eza -lh";
       lb = "nvim ~/Seafile/logbook/`date +'%Y-%m'`.md";
-      edit = "sudo nvim /etc/nixos/configuration.nix";
+      edit = "nvim /home/ow/src/dotfiles/nixos/configuration.nix";
       update = "sudo nixos-rebuild switch";
     };
     promptInit = ''
@@ -478,7 +546,7 @@
   #   enableSSHSupport = true;
   # };
 
-  services.pipewire.enable = true;
+  services.pipewire.enable = false;
   services.blueman.enable = true;
 
   # List services that you want to enable:
@@ -500,22 +568,23 @@
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   networking.firewall.allowedUDPPorts = [
-    51820 # wireguard
+    51820 # wireguard pallas
+    51821 # wireguard fritzbox
   ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   nix.gc = {
-    automatic = true;
+    automatic = false; # true;
     dates = "weekly";
     options = "--delete-older-than 31d";
   };
 
   # Sound
-  sound = {
-    enable = true;
-    mediaKeys.enable = true;
-  };
+  #sound = {
+  #  enable = true;
+  #  mediaKeys.enable = true;
+  #};
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
 
