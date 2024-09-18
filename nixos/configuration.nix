@@ -219,7 +219,7 @@
             position = "0x0";
             primary = true;
           };
-          DP-10.enable = false;
+          DP-11.enable = false;
         };
       };
       "büro" = {
@@ -227,7 +227,7 @@
         fingerprint = {
           eDP-1 =
             "00ffffffffffff0009e5640900000000161e0104a51d1278039696a7514c9d2610535600000001010101010101010101010101010101743c80a070b02840302036001eb31000001a5d3080a070b02840302036001eb31000001a000000fe00424f452048460a202020202020000000fe004e5631333357554d2d4e36310a002e";
-          DP-10 =
+          DP-11 =
             "00ffffffffffff0010acf3a04c564430181c0104b55825783eee95a3544c99260f5054a54b00714f81008180a940d1c00101010101014c9a00a0f0402e6030203a00706f3100001a000000ff00354b4330333836453044564c0a000000fc0044454c4c20553338313844570a000000fd001855197328000a20202020202001b202031af14d9005040302071601141f12135a2309070783010000023a801871382d40582c4500706f3100001e565e00a0a0a0295030203500706f3100001acd4600a0a0381f4030203a00706f3100001a2d5080a070402e6030203a00706f3100001a134c00a0f040176030203a00706f3100001a000000000000000000000053";
         };
         config = {
@@ -237,7 +237,7 @@
             position = "0x0";
             primary = true;
           };
-          DP-10 = {
+          DP-11 = {
             enable = true;
             mode = "3840x1600";
             position = "1920x0";
@@ -383,6 +383,7 @@
       extensions = [ "rust-src" ];
     };
   in with pkgs; [
+    alsa-utils
     calibre
     tor-browser
     wireguard-tools
@@ -525,6 +526,7 @@
       lb = "nvim ~/Seafile/logbook/`date +'%Y-%m'`.md";
       edit = "nvim /home/ow/src/dotfiles/nixos/configuration.nix";
       update = "sudo nixos-rebuild switch";
+      #scannedpdf = "convert -density 150 input.pdf -rotate "$([ $((RANDOM % 2)) -eq 1 ] && echo -)0.$(($RANDOM % 4 + 5))" -attenuate 0.4 +noise Multiplicative -attenuate 0.03 +noise Multiplicative -sharpen 0x1.0 -colorspace Gray output.pdf";
     };
     promptInit = ''
       eval "$(atuin init zsh)"
@@ -546,7 +548,28 @@
   #   enableSSHSupport = true;
   # };
 
-  services.pipewire.enable = false;
+  # publish services via avahi
+  services.avahi = {
+    enable = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+  };
+
+  # enable discovery of pulse and airplay sinks (also needs avahi, above)
+  hardware.pulseaudio.zeroconf.discovery.enable = true;
+  services.pipewire.extraConfig.pipewire-pulse."enable-raop-discover" = {
+    "pulse.cmd" = [{
+      cmd = "load-module";
+      args = "module-raop-discover";
+    }];
+  };
+
+  services.pipewire.enable = true;
+  services.pipewire.raopOpenFirewall = true;
   services.blueman.enable = true;
 
   # List services that you want to enable:
@@ -581,11 +604,42 @@
   };
 
   # Sound
-  #sound = {
-  #  enable = true;
-  #  mediaKeys.enable = true;
-  #};
-  hardware.pulseaudio.enable = true;
+  services.actkbd = let volumeStep = "5%";
+  in {
+    enable = true;
+    bindings = [
+      # "Mute" media key
+      {
+        keys = [ 113 ];
+        events = [ "key" ];
+        command = "${pkgs.alsa-utils}/bin/amixer -q set Master toggle";
+      }
+
+      # "Lower Volume" media key
+      {
+        keys = [ 114 ];
+        events = [ "key" "rep" ];
+        command =
+          "${pkgs.alsa-utils}/bin/amixer -q set Master ${volumeStep}- unmute";
+      }
+
+      # "Raise Volume" media key
+      {
+        keys = [ 115 ];
+        events = [ "key" "rep" ];
+        command =
+          "${pkgs.alsa-utils}/bin/amixer -q set Master ${volumeStep}+ unmute";
+      }
+
+      # "Mic Mute" media key
+      {
+        keys = [ 190 ];
+        events = [ "key" ];
+        command = "${pkgs.alsa-utils}/bin/amixer -q set Capture toggle";
+      }
+    ];
+  };
+  hardware.pulseaudio.enable = false;
   hardware.bluetooth.enable = true;
 
   # This value determines the NixOS release from which the default
