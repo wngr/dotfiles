@@ -65,102 +65,102 @@ o.formatoptions = "cqj" -- t == autoformat
 
 
 -- setup mason first
-require("mason").setup()
-require("mason-lspconfig").setup()
+--require("mason").setup()
+--require("mason-lspconfig").setup()
 
-lspconfig = require('lspconfig')
+--lspconfig = require('lspconfig')
 
-require("mason-lspconfig").setup_handlers {
-    -- The first entry (without a key) will be the default handler
-    -- and will be called for each installed server that doesn't have
-    -- a dedicated handler.
-    function (server_name) -- default handler (optional)
-        lspconfig[server_name].setup {}
-    end,
-   ["tsserver"] = function()
-     lspconfig.tsserver.setup({
-       settings = {
-           typescript = {
-           format = {
-             convertTabsToSpaces = true,
-             indentSize = 4,
-             indentStyle = "Smart",
-             tabSize = 4,
-             trimTrailingWhitespace = true,
-           }
-         }
-       }
-     })
-   end,
-
-    -- Next, you can provide a dedicated handler for specific servers.
-    -- For example, a handler override for the `rust_analyzer`:
-   ["rust_analyzer"] = function ()
-      local opts = {
-        tools = { -- rust-tools options
-          autoSetHints = true,
-          hover_with_actions = true,
-          inlay_hints = {
-            auto = true,
-            show_parameter_hints = true,
-            parameter_hints_prefix = "<- ",
-            other_hints_prefix = "=> ",
-            },
-        },
-
-      -- all the opts to send to nvim-lspconfig
-      -- these override the defaults set by rust-tools.nvim
-      -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-        server = {
-          -- on_attach is a callback called when the language server attachs to the buffer
-          -- on_attach = on_attach,
-          settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-              imports = {
-                granularity = {
-                  group = "crate",
-                },
-                group = {
-                  enable = false,
-                },
-              },
- --             diagnostics = {
- --               enable = true,
- --               disabled = {"unresolved-proc-macro"},
- --               enableExperimental = true,
- --             },
-              -- enable clippy on save
---              checkOnSave = true,
-              check = {
-                command = "clippy",
-                --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" }, -- wasm
-      --          invocationStrategy = "once",
-                --invocationLocation = "root",
-              },
---              procMacro = { -- enabled by default now
---                enable = true,
---              },
-              cargo = {
-                --noDefaultFeatures = "XXXXX",
-               features = "all",
---                target = "wasm32-unknown-unknown", -- wasm
-     --           buildScripts = {
-     --             enable = true,
---                  overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" }, -- wasm
-      --            invocationStrategy = "once",
-      --            invocationLocation = "root",
-    --            }
-              },
-            }
-          }
-        },
-      }
-
-      require('rust-tools').setup(opts)
-   end
-}
+--require("mason-lspconfig").setup_handlers {
+--    -- The first entry (without a key) will be the default handler
+--    -- and will be called for each installed server that doesn't have
+--    -- a dedicated handler.
+--    function (server_name) -- default handler (optional)
+--        lspconfig[server_name].setup {}
+--    end,
+--   ["tsserver"] = function()
+--     lspconfig.tsserver.setup({
+--       settings = {
+--           typescript = {
+--           format = {
+--             convertTabsToSpaces = true,
+--             indentSize = 4,
+--             indentStyle = "Smart",
+--             tabSize = 4,
+--             trimTrailingWhitespace = true,
+--           }
+--         }
+--       }
+--     })
+--   end,
+--
+--    -- Next, you can provide a dedicated handler for specific servers.
+--    -- For example, a handler override for the `rust_analyzer`:
+----   ["rust_analyzer"] = function ()
+----      local opts = {
+----        tools = { -- rust-tools options
+----          autoSetHints = true,
+----          hover_with_actions = true,
+----          inlay_hints = {
+----            auto = true,
+----            show_parameter_hints = true,
+----            parameter_hints_prefix = "<- ",
+----            other_hints_prefix = "=> ",
+----            },
+----        },
+----
+----      -- all the opts to send to nvim-lspconfig
+----      -- these override the defaults set by rust-tools.nvim
+----      -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+----        server = {
+----          -- on_attach is a callback called when the language server attachs to the buffer
+----          -- on_attach = on_attach,
+----          settings = {
+----            -- to enable rust-analyzer settings visit:
+----            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+----            ["rust-analyzer"] = {
+----              imports = {
+----                granularity = {
+----                  group = "crate",
+----                },
+----                group = {
+----                  enable = false,
+----                },
+----              },
+---- --             diagnostics = {
+---- --               enable = true,
+---- --               disabled = {"unresolved-proc-macro"},
+---- --               enableExperimental = true,
+---- --             },
+----              -- enable clippy on save
+------              checkOnSave = true,
+----              check = {
+----                command = "clippy",
+----                --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" }, -- wasm
+----      --          invocationStrategy = "once",
+----                --invocationLocation = "root",
+----              },
+------              procMacro = { -- enabled by default now
+------                enable = true,
+------              },
+----              cargo = {
+----                --noDefaultFeatures = "XXXXX",
+----               features = "all",
+------                target = "wasm32-unknown-unknown", -- wasm
+----     --           buildScripts = {
+----     --             enable = true,
+------                  overrideCommand = { "cargo", "check", "--quiet", "--message-format=json" }, -- wasm
+----      --            invocationStrategy = "once",
+----      --            invocationLocation = "root",
+----    --            }
+----              },
+----            }
+----          }
+----        },
+----      }
+----
+----      require('rust-tools').setup(opts)
+----   end
+--}
 
 -- trouble setup
 require'nvim-web-devicons'.setup {}
@@ -266,7 +266,8 @@ local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, 
 --bmap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
 --hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
 hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
-hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
+--hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
+hmap('n', '<leader>la', '<Cmd>lua vim.cmd.RustLsp("codeAction")<CR>')
 --hmap('n', '<leader>la', ':RustHoverActions<CR>')
 hmap('n', '<leader>le', ':Trouble diagnostics_custom toggle<CR>')
 --hmap('n', '<leader>la', ':Telescope vim.lsp.buf.code_action()<CR>')
@@ -442,14 +443,55 @@ function _G.LspOk()
 end
 
 
+-- TODO
+local lsp_on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+end
+
+--- rustacieanvim
+local rust_lsp_on_attach = function(client, bufnr)
+  lsp_on_attach(client, bufnr)
+
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+--  buf_set_keymap('n', '<space>k', "<cmd>lua vim.cmd.RustLsp('openDocs')<CR>", opts)
+--  buf_set_keymap('n', '<space>p', "<cmd>lua vim.cmd.RustLsp('openCargo')<CR>", opts)
+end
+
+vim.g.rustaceanvim = function()
+  return {
+    -- Plugin configuration
+    tools = {
+    },
+    -- LSP configuration
+    server = {
+      on_attach = rust_lsp_on_attach,
+      default_settinigs = {
+        -- rust-analyzer language server configuration
+        ['rust-analyzer'] = {
+          checkOnSave = false,
+        },
+      },
+    },
+    -- DAP configuration
+    dap = {
+    },
+  }
+end
+
 -- neovim + ra workaround
 -- https://github.com/neovim/neovim/issues/30985#issuecomment-2447329525
-for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
-    local default_diagnostic_handler = vim.lsp.handlers[method]
-    vim.lsp.handlers[method] = function(err, result, context, config)
-        if err ~= nil and err.code == -32802 then
-            return
-        end
-        return default_diagnostic_handler(err, result, context, config)
-    end
-end
+--for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+--    local default_diagnostic_handler = vim.lsp.handlers[method]
+--    vim.lsp.handlers[method] = function(err, result, context, config)
+--        if err ~= nil and err.code == -32802 then
+--            return
+--        end
+--        return default_diagnostic_handler(err, result, context, config)
+--    end
+--end

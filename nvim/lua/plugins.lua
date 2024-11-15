@@ -18,10 +18,11 @@ return require('packer').startup(function()
 	use 'preservim/nerdtree'
 
 	-- lsp
-  use 'neovim/nvim-lspconfig'
-	use 'nvim-lua/lsp_extensions.nvim'
-  use { "williamboman/mason.nvim" }
-  use 'williamboman/mason-lspconfig.nvim'
+  --
+--  use 'neovim/nvim-lspconfig' -- not needed for rustaceanvim
+--	use 'nvim-lua/lsp_extensions.nvim'
+--  use { "williamboman/mason.nvim" }
+--  use 'williamboman/mason-lspconfig.nvim'
   use 'folke/todo-comments.nvim'
 --  use 'williamboman/nvim-lsp-installer' deprecated
   
@@ -39,7 +40,8 @@ return require('packer').startup(function()
     use 'hrsh7th/cmp-buffer'
 
   -- Rust
-    use 'simrat39/rust-tools.nvim'
+    use 'mrcjkb/rustaceanvim'
+    
 --  use 'nvim-lua/popup.nvim'
     use 'mfussenegger/nvim-dap'
 
