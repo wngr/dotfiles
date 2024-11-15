@@ -11,6 +11,8 @@ local map = vim.api.nvim_set_keymap
 --color scheme
 vim.opt.termguicolors = true
 
+vim.wo.relativenumber = true
+
 require'nvim-web-devicons'.setup {
  -- your personnal icons can go here (to override)
  -- you can specify color or cterm_color instead of specifying both of them
@@ -131,18 +133,18 @@ require("mason-lspconfig").setup_handlers {
  --             },
               -- enable clippy on save
 --              checkOnSave = true,
---              check = {
---                command = "clippy",
+              check = {
+                command = "clippy",
                 --overrideCommand = { "cargo", "clippy", "--message-format=json", "--manifest-path=client/js/Cargo.toml" }, -- wasm
       --          invocationStrategy = "once",
                 --invocationLocation = "root",
---              },
+              },
 --              procMacro = { -- enabled by default now
 --                enable = true,
 --              },
-     --         cargo = {
+              cargo = {
                 --noDefaultFeatures = "XXXXX",
-                --features = "all",
+               features = "all",
 --                target = "wasm32-unknown-unknown", -- wasm
      --           buildScripts = {
      --             enable = true,
@@ -150,7 +152,7 @@ require("mason-lspconfig").setup_handlers {
       --            invocationStrategy = "once",
       --            invocationLocation = "root",
     --            }
-      --        },
+              },
             }
           }
         },
@@ -158,6 +160,34 @@ require("mason-lspconfig").setup_handlers {
 
       require('rust-tools').setup(opts)
    end
+}
+
+-- trouble setup
+require'nvim-web-devicons'.setup {}
+require'trouble'.setup{
+  modes = {
+    diagnostics_custom = {
+      mode = "diagnostics",
+      preview = {
+        type = "split",
+        relative = "win",
+        position = "right",
+        size = 0.3,
+      },
+      filter = {
+        any = {
+          buf = 0, -- current buffer
+          {
+            severity = vim.diagnostic.severity.ERROR, -- errors only
+            -- limit to files in the current project
+            function(item)
+              return item.filename:find((vim.loop or vim.uv).cwd(), 1, true)
+            end,
+          },
+        },
+      },
+    },
+  },
 }
 
 
@@ -238,7 +268,7 @@ local function hmap(a, b, c) vim.api.nvim_set_keymap(a, b, c, { noremap = true, 
 hmap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.definition()<CR>')
 hmap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>')
 --hmap('n', '<leader>la', ':RustHoverActions<CR>')
-hmap('n', '<leader>le', ':TroubleToggle<CR>')
+hmap('n', '<leader>le', ':Trouble diagnostics_custom toggle<CR>')
 --hmap('n', '<leader>la', ':Telescope vim.lsp.buf.code_action()<CR>')
 --bmap('n', '<leader>lff', '<Cmd>lua vim.lsp.buf.hover()<CR>')
 --bmap('n', '<leader>lfi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
@@ -252,7 +282,7 @@ hmap('n', '<leader>lo', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 hmap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
 
 --hmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
-hmap('n', '<leader>ls', ':Telescope lsp_workspace_symbols<CR>')
+hmap('n', '<leader>ls', ':Telescope lsp_dynamic_workspace_symbols<CR>')
 --hmap('n', '<leader>le', ':Telescope lsp_document_diagnostics<CR>')
 hmap('n', '<leader>lw', ':Telescope lsp_workspace_diagnostics<CR>')
 -- https://github.com/gfanto/fzf-lsp.nvim#commands
@@ -408,5 +438,18 @@ function _G.LspOk()
         return 'OK'
     else
         return ''
+    end
+end
+
+
+-- neovim + ra workaround
+-- https://github.com/neovim/neovim/issues/30985#issuecomment-2447329525
+for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+    local default_diagnostic_handler = vim.lsp.handlers[method]
+    vim.lsp.handlers[method] = function(err, result, context, config)
+        if err ~= nil and err.code == -32802 then
+            return
+        end
+        return default_diagnostic_handler(err, result, context, config)
     end
 end
