@@ -308,6 +308,7 @@
       uid = 1000;
       isNormalUser = true;
       extraGroups = [
+        "dialout"
         "wheel"
         "networkmanager"
         "docker"
