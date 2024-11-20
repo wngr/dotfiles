@@ -430,10 +430,10 @@ function _G.LspOk()
     if next(vim.lsp.buf_get_clients(0)) == nil then
         return ''
     end
-    local h = vim.diagnostic.get(0, 'Hint')
-    local w = vim.diagnostic.get(0, 'Warning')
-    local e = vim.diagnostic.get(0, 'Error')
-    local i = vim.diagnostic.get(0, 'Info')
+    local h = vim.diagnostic.get(0, { severity = 'Hint'})
+    local w = vim.diagnostic.get(0, { severity = 'Warning'})
+    local e = vim.diagnostic.get(0, { severity = 'Error'})
+    local i = vim.diagnostic.get(0, { severity = 'Info'})
 
     if h + w + e + i == 0 then
         return 'OK'
@@ -461,6 +461,14 @@ local rust_lsp_on_attach = function(client, bufnr)
 
 --  buf_set_keymap('n', '<space>k', "<cmd>lua vim.cmd.RustLsp('openDocs')<CR>", opts)
 --  buf_set_keymap('n', '<space>p', "<cmd>lua vim.cmd.RustLsp('openCargo')<CR>", opts)
+  vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+  vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#5f6661" })
+--    if client.server_capabilities.inlayHintProvider then
+--      buf_set_keymap('n', '<leader>h', function()
+--        local current_setting = vim.lsp.inlay_hint.is_enabled(bufnr)
+--        vim.lsp.inlay_hint.enable(bufnr, not current_setting)
+--      end, opts)
+--    end
 end
 
 vim.g.rustaceanvim = function()
