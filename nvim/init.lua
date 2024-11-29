@@ -34,6 +34,7 @@ require'nvim-web-devicons'.setup {
 }
 --o.background = "light"
 vim.cmd('colorscheme ayu')
+
 --vim.g.ayu_mirage = true
 
 ---- intuitive splits
@@ -62,6 +63,12 @@ opt.syntax = "on"
 opt.undofile = true
 o.colorcolumn = "80"
 o.formatoptions = "cqj" -- t == autoformat
+opt.cursorline = true
+
+vim.cmd [[highlight LineNr guifg=#666666]]
+vim.cmd [[highlight CursorLineNr guifg=#A9A9A9]]
+
+
 
 
 -- setup mason first
@@ -479,10 +486,14 @@ vim.g.rustaceanvim = function()
     -- LSP configuration
     server = {
       on_attach = rust_lsp_on_attach,
-      default_settinigs = {
+      default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
           checkOnSave = false,
+          files = {
+            excludeDirs = {'.worktrees', '.direnv' },
+            --            watcher = "server",
+          },
         },
       },
     },
@@ -503,3 +514,5 @@ end
 --        return default_diagnostic_handler(err, result, context, config)
 --    end
 --end
+--
+
