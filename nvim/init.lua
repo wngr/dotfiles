@@ -291,8 +291,9 @@ hmap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
 
 --hmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 hmap('n', '<leader>ls', ':Telescope lsp_dynamic_workspace_symbols<CR>')
+hmap('n', '<leader>lw', ':Telescope lsp_document_symbols<CR>')
 --hmap('n', '<leader>le', ':Telescope lsp_document_diagnostics<CR>')
-hmap('n', '<leader>lw', ':Telescope lsp_workspace_diagnostics<CR>')
+hmap('n', '<leader>lq', ':Telescope lsp_workspace_diagnostics<CR>')
 -- https://github.com/gfanto/fzf-lsp.nvim#commands
 
     -- List symbols in the current document matching the query string.
@@ -333,16 +334,16 @@ map('n', '<C-l>', ':wincmd l<CR>', { silent = true })
 -- Setup Completion
 -- See https://github.com/hrsh7th/nvim-cmp#basic-configuration
 -- Completion behavior
-vim.opt.completeopt = { 'menuone' ,'noinsert', 'noselect' }
-vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
+---vim.opt.completeopt = { 'menuone' ,'noinsert', 'noselect' }
+---vim.g.completion_matching_strategy_list = {"exact", "substring", "fuzzy"}
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
-  snippet = {
-    expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
+--  snippet = {
+--    expand = function(args)
+--        vim.fn["vsnip#anonymous"](args.body)
+--    end,
+--  },
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -361,12 +362,16 @@ cmp.setup({
 
   -- Installed sources
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'vsnip' },
-    { name = 'path' },
-    { name = 'buffer' },
+    { name = 'nvim_lsp', priority = 1000, },
+    { name = 'nvim_lsp_signature_help' },
+--    { name = 'vsnip', priority = 900, },
+--    { name = 'path', priority = 800, },
+--    { name = 'buffer', priority = 700, },
   },
 })
+
+require('cmp_nvim_lsp')
+
 require("todo-comments").setup(
 {
   highlight = {
@@ -478,6 +483,7 @@ local rust_lsp_on_attach = function(client, bufnr)
 --    end
 end
 
+
 vim.g.rustaceanvim = function()
   return {
     -- Plugin configuration
@@ -489,13 +495,25 @@ vim.g.rustaceanvim = function()
       default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
-          checkOnSave = false,
+          checkOnSave = true,
           files = {
             excludeDirs = {'.worktrees', '.direnv' },
             --            watcher = "server",
           },
+          cargo = {
+              extraEnv = { CARGO_PROFILE_RUST_ANALYZER_INHERITS = 'dev', },
+              extraArgs = { "--profile", "rust-analyzer", },
+              features = "all",
+          },
         },
       },
+      capabilities = {
+       completion = {
+          completionItem = {
+            snippetSupport = false,
+          },
+        }
+      }
     },
     -- DAP configuration
     dap = {
