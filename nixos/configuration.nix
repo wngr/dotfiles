@@ -387,9 +387,10 @@
   # $ nix search wget
   environment.systemPackages = let
     rust = pkgs.rust-bin.stable.latest.default.override {
-      extensions = [ "rust-src" ];
+      extensions = [ "rust-src" "rust-analyzer" ];
     };
   in with pkgs; [
+    libheif
     pdfgrep
     alsa-utils
     calibre
@@ -435,8 +436,9 @@
     cargo-edit
     cargo-watch
     watchexec
+    mdbook
+    bacon
     rust
-    rust-analyzer
     gcc
     libreoffice
     tree

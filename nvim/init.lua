@@ -489,7 +489,7 @@ vim.g.rustaceanvim = function()
       default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
-          checkOnSave = false,
+          checkOnSave = true,
           files = {
             excludeDirs = {'.worktrees', '.direnv' },
             --            watcher = "server",
