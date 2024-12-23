@@ -33,6 +33,7 @@ return require('packer').startup(function()
     -- LSP completion source for nvim-cmp
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-vsnip'
+    use 'hrsh7th/cmp-nvim-lsp-signature-help'
     use 'hrsh7th/vim-vsnip'
 
     -- Other usefull completion sources
@@ -65,6 +66,8 @@ use 'folke/lsp-colors.nvim'
 use 'nvim-tree/nvim-web-devicons'
 
 use 'LnL7/vim-nix'
+
+use 'sindrets/diffview.nvim'
 
 
 end)
