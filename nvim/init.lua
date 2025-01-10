@@ -67,6 +67,7 @@ opt.cursorline = true
 
 vim.cmd [[highlight LineNr guifg=#666666]]
 vim.cmd [[highlight CursorLineNr guifg=#A9A9A9]]
+vim.cmd [[highlight Comment ctermfg=cyan guifg=#ff79c6]]
 
 
 
