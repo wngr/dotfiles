@@ -134,25 +134,25 @@
           #resolvectl dnssec wg0 false
         '';
       };
-      fritzbox = {
-        ips = [ "192.168.178.201/24" ];
-        listenPort = 51821;
-
-        privateKeyFile = "/home/ow/wg-fritzbox.key";
-
-        peers = [{
-          publicKey = "N4hHM8YP8B4nmzbM1uCWIOEaS+JOJLSrNVoMpj8/c3M=";
-          presharedKeyFile = "/home/ow/wg-fritzbox-psk.key";
-          allowedIPs = [ "192.168.178.0/24" ];
-
-          #myfritz.net endpoint also resolves ipv6
-          #endpoint = "09pat8pe4olim7iv.myfritz.net:53961";
-          endpoint = "wngr.ddns.net:53961";
-
-          dynamicEndpointRefreshSeconds = 600;
-          persistentKeepalive = 25;
-        }];
-      };
+#      fritzbox = {
+#        ips = [ "192.168.178.201/24" ];
+#        listenPort = 51821;
+#
+#        privateKeyFile = "/home/ow/wg-fritzbox.key";
+#
+#        peers = [{
+#          publicKey = "N4hHM8YP8B4nmzbM1uCWIOEaS+JOJLSrNVoMpj8/c3M=";
+#          presharedKeyFile = "/home/ow/wg-fritzbox-psk.key";
+#          allowedIPs = [ "192.168.178.0/24" ];
+#
+#          #myfritz.net endpoint also resolves ipv6
+#          #endpoint = "09pat8pe4olim7iv.myfritz.net:53961";
+#          endpoint = "wngr.ddns.net:53961";
+#
+#          dynamicEndpointRefreshSeconds = 600;
+#          persistentKeepalive = 25;
+#        }];
+#      };
 
     };
   };
