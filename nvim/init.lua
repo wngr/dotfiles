@@ -484,7 +484,7 @@ local rust_lsp_on_attach = function(client, bufnr)
 --    end
 end
 
-
+require("nvim-treesitter").setup{}
 vim.g.rustaceanvim = function()
   return {
     -- Plugin configuration
@@ -492,7 +492,7 @@ vim.g.rustaceanvim = function()
     },
     -- LSP configuration
     server = {
-      on_attach = rust_lsp_on_attach,
+       on_attach = rust_lsp_on_attach,
       default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
