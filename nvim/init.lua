@@ -20,7 +20,10 @@ vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
 -- Set LSP log level
-vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level("debug")
+
+-- Global state for LSP progress tracking
+_G.lsp_progress = {}
 
 -- Configure rustaceanvim BEFORE lazy.nvim loads it
 vim.g.rustaceanvim = {
@@ -30,41 +33,45 @@ vim.g.rustaceanvim = {
       vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#5f6661" })
     end,
     on_init = function(client, result)
-      print("rust-analyzer initialized")
-      print("Root dir: " .. (client.config.root_dir or "none"))
-
-      -- After indexing, request workspace diagnostics to check if RA has data
-      vim.defer_fn(function()
-        local params = { textDocument = vim.lsp.util.make_text_document_params() }
-        client.request("textDocument/documentSymbol", params, function(err, symbols)
-          if err then
-            print("Document symbols error:", vim.inspect(err))
-          elseif not symbols or #symbols == 0 then
-            print("WARNING: No symbols found - rust-analyzer has no semantic data!")
-          else
-            print("Found " .. #symbols .. " symbols - rust-analyzer working!")
-          end
-        end)
-      end, 8000)
+      vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
     end,
     handlers = {
       ["$/progress"] = function(_, result, ctx)
         local client = vim.lsp.get_client_by_id(ctx.client_id)
-        if result.value and result.value.message then
-          print(string.format("[%s] %s", client.name, result.value.message))
+        if not client then return end
+
+        local token = result.token
+        local value = result.value
+
+        if not _G.lsp_progress[client.name] then
+          _G.lsp_progress[client.name] = {}
         end
-        -- Notify when a task completes
-        if result.value and result.value.kind == "end" then
-          print(string.format("[%s] Task completed: %s", client.name, result.token))
+
+        if value.kind == "begin" then
+          _G.lsp_progress[client.name][token] = {
+            title = value.title,
+            message = value.message,
+            percentage = value.percentage,
+          }
+        elseif value.kind == "report" then
+          if _G.lsp_progress[client.name][token] then
+            _G.lsp_progress[client.name][token].message = value.message
+            _G.lsp_progress[client.name][token].percentage = value.percentage
+          end
+        elseif value.kind == "end" then
+          _G.lsp_progress[client.name][token] = nil
         end
+
+        -- Trigger statusline refresh
+        vim.cmd('redrawstatus')
       end,
     },
     default_settings = {
       ['rust-analyzer'] = {
         checkOnSave = true,
-         check = {
-           command = "clippy",
-         },
+--         check = {
+--           command = "clippy",
+--         },
         files = {
           excludeDirs = { '.worktrees', '.direnv', "frontend", ".pnpm-store" },
         },
