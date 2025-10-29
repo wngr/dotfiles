@@ -66,15 +66,13 @@ vim.g.rustaceanvim = {
            command = "clippy",
          },
         files = {
-          excludeDirs = { '.worktrees', '.direnv' },
+          excludeDirs = { '.worktrees', '.direnv', "frontend", ".pnpm-store" },
         },
         cargo = {
           buildScripts = {
             enable = true,
           },
-        },
-        procMacro = {
-          enable = true,
+          features = "all",
         },
 --        diagnostics = {
 --          enable = true,
@@ -87,7 +85,7 @@ vim.g.rustaceanvim = {
         --   command = "check", -- Use 'check' instead of 'clippy' for speed
         -- },
          procMacro = {
-           enable = false, -- Disable proc macro expansion if slow
+           enable = true,
          },
       },
     },
