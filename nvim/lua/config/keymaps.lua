@@ -37,5 +37,9 @@ map('n', '<C-j>', ':wincmd j<CR>', opts)
 map('n', '<C-h>', ':wincmd h<CR>', opts)
 map('n', '<C-l>', ':wincmd l<CR>', opts)
 
+-- Window splitting
+map('n', '<C-v>', ':vsplit<CR>', opts)
+map('n', '<C-s>', ':split<CR>', opts)
+
 -- File explorer (netrw)
 map('n', '<C-T>', ':Explore<CR>', opts)

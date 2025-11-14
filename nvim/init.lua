@@ -69,9 +69,9 @@ vim.g.rustaceanvim = {
     default_settings = {
       ['rust-analyzer'] = {
         checkOnSave = true,
---         check = {
---           command = "clippy",
---         },
+         check = {
+           command = "clippy",
+         },
         files = {
           excludeDirs = { '.worktrees', '.direnv', "frontend", ".pnpm-store" },
         },
@@ -79,6 +79,8 @@ vim.g.rustaceanvim = {
           buildScripts = {
             enable = true,
           },
+          extraEnv = { CARGO_PROFILE_RUST_ANALYZER_INHERITS = 'dev', },
+          extraArgs = { "--profile", "rust-analyzer", },
           features = "all",
         },
 --        diagnostics = {

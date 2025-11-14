@@ -10,6 +10,7 @@ opt.cursorline = true
 opt.colorcolumn = "80"
 opt.showmatch = true
 opt.matchtime = 2
+opt.laststatus = 2  -- Always show statusline
 
 -- Splits
 g.splitright = true
