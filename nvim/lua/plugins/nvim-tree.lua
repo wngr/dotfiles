@@ -21,6 +21,6 @@ return {
     })
 
     -- Toggle with Ctrl-t
-    vim.keymap.set("n", "<C-t>", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file tree" })
+    vim.keymap.set("n", "<C-t>", "<cmd>NvimTreeFindFileToggle<cr>", { desc = "Toggle file tree" })
   end,
 }

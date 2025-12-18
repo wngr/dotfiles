@@ -70,10 +70,10 @@ vim.g.rustaceanvim = {
       ['rust-analyzer'] = {
         checkOnSave = true,
          check = {
-           command = "clippy",
+           --command = "clippy",
          },
         files = {
-          excludeDirs = { '.worktrees', '.direnv', "frontend", ".pnpm-store" },
+          excludeDirs = { '.worktrees', '.direnv', "frontend", ".pnpm-store", "hs-data-systems-brb-ui" },
         },
         cargo = {
           buildScripts = {
